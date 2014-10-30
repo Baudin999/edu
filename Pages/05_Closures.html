@@ -1,0 +1,134 @@
+<h1>Closures</h1>
+<p>
+    Because JavaScript has function scope and because we can 
+    return functions; we can use these lexically scoped variables
+    to create what we call 'closures'.
+</p>
+<p>Here's an example:</p>
+
+<pre>
+
+    var getNumber = (function () {
+    
+        var numbers = [
+            'zero', 'one', 'two', 'three', 'four', 
+            'five', 'six', 'seven', 'eight', 'nine'
+        ];
+        
+        return function (numberIndex) {
+            return numbers[numberIndex];
+        };
+    
+    }());
+    
+    console.log( getNumber(5) );
+
+</pre>
+
+<p class="remark">
+    This might seem like a very 'textbook' example and not something
+    you might use in your day to day programming, but closures offer
+    a world of options.
+</p>
+<p>
+    Lets examine why we'd want to use closures. If you look at the previous
+    example you can see that we return a function as a result from an
+    anonymous function. And because of closure this resulting function can
+    use the numbers array even though the wrapping function went out of scope.
+    This way the Array is not initialized every time and this Array is not
+    left on the global scope. This is the perfect way to do method caching.
+</p>
+<p>
+    Another example of closures I tend to use often is creating a class which
+    wrapps around a jQuery object. This following example demonstrates this:
+</p>
+
+<pre class="ignore">
+
+    function MenuItem ($menuItem) {
+        /* 
+        the constructor closes around the member function
+        and returns the original jQuery item.
+        */
+        this.getOriginalMenuItem = function () {
+            return $menuItem;
+        };
+        this.activeClass = 'active';
+    };
+    
+    MenuItem.initialize = function () {
+        return $('li.menu-item').map( function ($menuItem) {
+            return new MenuItem( $menuItem );
+        } );
+    };
+    
+    /* Now when I need it in another function I can use: */
+    MenuItem.prototype.toggleActive = function () {
+        var originalMenuItem = this.getOriginalMenuItem();
+        if (originalMenuItem.hasClass( this.activeClass )) {
+            originalMenuItem.addClass( this.activeClass );
+        }
+        else {
+            originalMenuItem.removeClass( this.activeClass );
+        }
+    };
+
+</pre>
+
+<p>
+    Closures are a very effective way to use readonly objects:
+</p>
+
+<pre>
+    /**
+    * CTOR
+    */
+    function Person (personDetails) {
+        Object.freeze( personDetails );
+        this.getDetail = function (key) {
+            return personDetails[key] || 'unknown';
+        };
+    };
+    
+    var peter = new Person( {
+        firstName: 'Peter',
+        lastName: 'Pan'
+    } );
+    console.log( peter.getDetail( 'firstName') );
+</pre>
+<p>
+    This method could be great for setting information which 
+    cannot be changed, like profile information or Organisation
+    structures; maybe menu structures or communication parts.
+</p>
+
+<p>
+    Eventhough we can freeze an object we can still interact with it's
+    value, or content. For example, we can still insert new items into
+    an Array of a frozen object:
+</p>
+
+<pre>
+    var o = {
+        items: []
+    };
+    
+    Object.freeze( o );
+    try {
+        o.items.push( 'Peter Pan' );
+        o.items.push( 'Wendy' );
+        
+        o.items.forEach( function (item) {
+            console.log( item );
+        } );
+        
+    } catch (e) {
+        console.log ( e );
+    }
+
+</pre>
+
+<p>
+    There is so much more to say about Object, closures and general
+    patterns for JavaScript that we can't touch them all.
+</p>

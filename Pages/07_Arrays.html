@@ -1,0 +1,161 @@
+
+<h1>Arrays in JavaScript</h1>
+<p>
+    Because Arrays are the only real data structure in JavaScript it is worth
+    our time to look at them for a bit longer. JavaScript has a rich build in
+    and optimised set of functions to work with arrays. A lot of people tend
+    to grab either the jQuery or underscore libraries to do much of the work
+    for which vanillaJS already has answers!
+</p>
+<h2>Array.prototype.slice</h2>
+<p>
+    One of the questions I get asked frequently is about the difference between 
+    'slice' and 'splice'; 'slice' is used to return a part of the array, leaving 
+    the original array in tact. The first parameter is the start-index, the second 
+    parameter is the stop-index. If you do not supply the last index you will get 
+    the 'tail' of the array. This is also the way we convert the 'arguments' member 
+    of a function into an actual Array:
+</p>
+<pre>
+    var fruits = ["Banana", "Orange", "Apple", "Mango"];
+    console.log( fruits.slice( 1, 2 ).join(', ') );
+    console.log( fruits.slice( 2 ).join(', ') );
+    console.log( fruits.join(', ') );
+</pre>
+<h2>Array.prototype.splice</h2>
+<p>
+    The 'splice' function get misused a lot. It's purpose is to insert another array
+    into an already existing array at an index. This function modifies the array and
+    as such should be used sparingly!
+</p>
+<pre>
+    var numbers = [
+            'zero', 'one', 'two', 'three', 'four', 
+            'seven', 'eight', 'nine'
+        ];
+    
+    var moreNumbers = numbers.splice( 5, 0, ['five', 'six'] );
+    console.log( moreNumbers.join(', ') || 'no value' );
+    console.log( numbers.join(', ') );
+</pre>
+<p>
+    The second parameter of the 'splice' function is the number of elements which
+    it needs to remove from the array. So you can also use the 'splice' function 
+    to get a sub-set of your array. Using the 'splice' method this way does not
+    change your original array and is therefor safe to use.
+</p>
+<pre>
+    var numbers = [
+            'zero', 'one', 'two', 'three', 'four', 
+            'five', 'six', 'seven', 'eight', 'nine'
+        ];
+    var subsetNumbers = numbers.splice( 2, 2 );
+    console.log( subsetNumbers );
+    console.log( numbers );
+</pre>
+<h2>Array.prototype.concat</h2>
+<p>
+    Joining arrays is easy in JavaScript. The 'concat' method does not change
+    the original Array and therefor is secure and can be used freely.
+</p>
+<pre>
+    var lowNumbers = [ 'zero', 'one', 'two', ],
+        midNumbers = [ 'three', 'four', 'five', 'six' ],
+        highNumbers = [ 'seven', 'eight', 'nine' ];
+        
+    var joined = lowNumbers.concat( midNumbers, highNumbers );
+    
+    console.log( joined.join(', ') );
+    console.log( lowNumbers.join(', ') );
+    console.log( midNumbers.join(', ') );
+    console.log( highNumbers.join(', ') );
+</pre>
+<h2>Array.prototype.sort</h2>
+<p>
+    The sort method does what it is supposed to do; but only for strings. Check
+    out the following example and shivver in fear!
+</p>
+<pre>
+    var words = [
+            'zero', 'one', 'two', 'three', 'four', 
+            'five', 'six', 'seven', 'eight', 'nine'
+        ];
+    console.log( words.sort() );
+    
+    var numbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+    console.log( numbers.sort() );
+</pre>
+<p>
+    The reason why this is so is that the numbers are sorted as strings. This 
+    might seem like a very silly implementation untill you realize that the 
+    default sort is exacly that. A default sort. If you want to sort 
+    differently you'll have to implement this your self.
+</p>
+<pre>
+    var numbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+    var result = numbers.sort( function(a,b) {
+        return a - b;
+    } );
+    console.log( result );
+    console.log( numbers );
+</pre>
+<p>
+    The reason why you do <code>a - b</code> is because the sort function
+    expects a negative value for when <code>a</code> is less then <code>b</code>.
+    It expects a <code>0</code> when they are equal and a positive value
+    when <code>a</code> is greater then <code>b</code>; signaling that the
+    indexes need to be reversed.
+</p><p>
+    Keep in mind that the 'sort' function mutates the original array. and 
+    therefor needs to be handled with care!
+</p>
+<h2>Other methods</h2>
+<p>
+    These methods were the most critical ones. The other methods you probably 
+    already know but I'll sum them up anyways:
+</p>
+<pre>
+    /* Array.prototype.push */
+    var numbers = [0,1,2,3,4,5];
+    var result = numbers.push( 6 );
+    console.log( numbers );
+    console.log( 'The length of the array is: ' + result );
+</pre>
+<pre>
+    /* Array.prototype.unshift */
+    var numbers = [1,2,3,4,5];
+    var result = numbers.unshift( 0 );
+    console.log( numbers );
+    console.log( 'The length of the array is: ' + result );
+</pre>
+<pre>
+    /* Array.prototype.pop */
+    var numbers = [1,2,3,4,5];
+    var result = numbers.pop( );
+    console.log( numbers );
+    console.log( result );
+</pre>
+<pre>
+    /* Array.prototype.shift */
+    var numbers = [1,2,3,4,5];
+    var result = numbers.shift( );
+    console.log( numbers );
+    console.log( result );
+</pre>
+<pre>
+    /* Array.prototype.indexOf */
+    var numbers = [1,2,3,4,5];
+    var result = numbers.indexOf( 4 );
+    console.log( numbers );
+    console.log( result );
+</pre>
+<pre>
+    /* Array.prototype.lastIndexOf */
+    /* second parameter is the start index */
+    /* Myu advice...don't use this function */
+    
+    var numbers = [1,2,3,4,5];
+    var result = numbers.lastIndexOf( 1, 2 );
+    console.log( numbers );
+    console.log( result );
+</pre>

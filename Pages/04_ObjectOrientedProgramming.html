@@ -1,0 +1,298 @@
+<h1>Objects</h1>
+
+<p>
+    Objects in JavaScript might be the second most disliked feature of 
+    the language. JavaScript uses prototypal inherritance instead of the 
+    classical inherritance which we know form languages like C# and Java. 
+    JavaScript does not have classes. Classes "define" the type of an 
+    object. In JavaScript you just create the objects and if and only if
+    there is rason for inheritance you inherit.
+</p>
+<p>
+    This concept can seem very 'brittle' and hard to create and maintain,
+    but as you will see in this chapter, nothing is further from the truth.
+    We we actually come to see that creating and manipulating objects in 
+    JavaScript is very easy and is in all aspects 'better' then the classical
+    way of thinking.
+</p>
+<p>
+    In JavaScript we can create an object by just typing it out; this is 
+    called an object literal:
+</p>
+<pre class="ignore">
+    var newObject = {};
+</pre>
+<p>
+    Members can be added seperated by a comma:
+</p>
+<pre>
+    var newObject = {
+        name: 'Carlos Kelkboom',
+        showName: function () {
+            console.log( this.name );
+        }
+    };
+    
+    newObject.showName();
+</pre>
+
+<p>
+    After creating an object they can be manipulated and changed. You
+    can add methods and properties to the object.
+</p>
+<pre>
+    var newObject = {
+        name: 'Carlos Kelkboom'
+    };
+    newObject.showName = function () {
+        console.log( this.name );
+    };
+    
+    newObject.showName();
+</pre>
+<p class="remark">
+    This is a very powerfull feature and as always, with great power
+    comes great responsibility. To again quote Douglass Crockford: 
+    "Please don't be stupid with this, because you can get very
+    stupid with this!".
+</p>
+
+<h2>Dynamic functions</h2>
+<p>
+    Just like properties you can add functions to an object at runtime.
+    There is however another syntax you can use to define functions on
+    an object:
+</p>
+<pre>
+    var o = {};
+    Object.defineProperty( o, 'say hi!', {
+        value: function (message) {
+            console.log( message );
+        }
+    });
+    
+    o['say hi!']('Hi there Peter!!');
+</pre>
+<p>
+    In JavaScript we can use any string as a member name. In ES6 we can 
+    use any object to define a memeber. This will bring some interresting
+    pattern to the language.
+</p>
+
+<h2>Getters and Setters</h2>
+<p>
+    As of ES5 we can implement getters and setters, values and other
+    properties of a member, the first example will show us how to 
+    create a property on the object. Keep in mind that we are using 
+    a self executing method because we want the property to close 
+    around the private field!
+</p>
+<pre>
+    var o = {};
+    
+    (function () {
+        var field;
+        Object.defineProperty( o, 'name', {
+            get: function () {
+                return field;
+            },
+            set: function (value) {
+                field = value;
+            }
+        });
+    }());
+    
+    o.name = 'Peter Pan';
+    
+    console.log( o.name );
+</pre>
+<p>
+    We might want to keep the backing field 'closer' to the implementation
+    of the getter and the setter. This reduces the distance of our code and
+    makes it possible to inject an implementation of automatic properties
+    onto the prototype of Object. An arguably better way to implement this 
+    is to write:
+</p>
+<pre>
+
+    var o = {};
+    
+    Object.defineProperty( o, 'name', (function () {
+        var field;
+
+        return {
+            get: function () {
+                return field;
+            },
+            set: function (value) {
+                field = value;
+            }
+        }
+    }()));
+    
+    o.name = 'Peter Pan';
+    
+    console.log( o.name );
+</pre>
+
+<p>
+    Keep in mind that if you are going to implement a simple getter
+    and simple setter you might as well just push the property onto
+    the object as show in the very first example.
+</p>
+<p>
+    Within the JavaScript community implementing getters and setters
+    with behaviour like this is considered 'bad code'. This is because
+    you intentionally add side-effects to your code, this means that
+    it is no longer possible to completely verify your code.
+</p>
+<p>
+    JavaScript takes this idea of side-effect free programming one step 
+    further and introduces 'Object.freeze', this freezes an object and
+    makes it immutable.
+</p>
+
+<pre>
+    var person = {
+        firstName: 'Peter',
+        lastName: 'Pan'
+    };
+    
+    Object.freeze(person);
+    
+    try { 
+        person.firstName = 'Wendy'; 
+    } 
+    catch (e) { 
+        console.log(e); 
+    }
+    
+</pre>
+
+
+
+<h2>Types in JavaScript</h2>
+<p>
+    JavaScript is a loosly typed language. This does not mean that JavaScript 
+    does not have types. It means that you do not have to specify them at 
+    design time. An example of the typing in JavaScript:
+</p>
+
+<pre>
+    console.log( 'Ik ben: ' + 30 + ' jaar oud.' );
+</pre>
+
+<p>
+    Somehow the runtime knew that it had to cast the Number to a String. This
+    is what implicit typing is all about. Again, this is something you can
+    tie into declarative programming and fuctional programming. Lots of 
+    Functional programming languages use something called type inference to
+    determine the type and for example the return value of functions.
+    This makes the code (in my opinion) rather clean.
+</p>
+<p>
+    We can verify that JavaScript has types by evaluating the following code:
+</p>
+
+<pre>
+    console.log( typeof 30 );
+    console.log( typeof 'Peter Taal' );
+</pre>
+
+<p>
+    We got the results 'number' and 'string'. Everything in 
+    JavaScript has a type, we can even do some type cohersion:
+</p>
+<pre>
+    console.log( typeof +'30' );
+    console.log( typeof Number('30') );
+    console.log( parseInt('08') + ' is of type: ' + typeof parseInt('08') );
+</pre>
+
+<p>
+Now lets get back to our object and see of what type this object is:
+</p>
+<pre>
+    var person = {};
+    console.log( typeof person );
+</pre>
+
+<p>
+As we can see, person is of type 'object'. But what if we wanted
+to be more specific? 'object' is quite general and maybe we'll 
+want to make some decisions based on the type of the object.
+</p><p>
+Here we get to constructor functions. A constructor function is
+a function which automatically gets a new object as it's function
+context (we'll discuss function context in the next chapter). 
+If it does not return an object it returns it's function context.
+Lets see how this works:
+</p>
+
+<h2>Custom types</h2>
+
+<pre>
+    function Human () {}
+    var human = new Human();
+    console.log(typeof human);
+</pre>
+
+<p> 
+This still prints out 'object'. But wait, we have another keyword
+in JavaScript called 'instanceof' which might help:
+</p>
+<pre>
+    function Human () {}
+    var human = new Human();
+    console.log( human instanceof Human );
+    console.log( human instanceof Object );
+</pre>
+<p>
+This is cool. Now we can test for types. A simple pattern for
+inherritance could be:
+</p>
+
+<h2>Inheritance</h2>
+<pre>
+    /* the human constructor */
+    function Human () {}
+    var human = new Human();
+    
+    /* the person constructor */
+    function Person () {}
+    Person.prototype = Human.prototype;
+
+    var peter = new Person();
+    console.log( 'Is Peter a Person?  ' + (human instanceof Person) );
+    console.log( 'Is Peter a Human?   ' + (human instanceof Human) );
+    console.log( 'Is Peter an Object? ' + (human instanceof Object) );
+</pre>
+
+<p>
+But wait, what is this 'prototype' property on the object, I
+did not specify this!
+</p><p>
+Every object in JavaScript has a prototype chain. This links
+our classes together and creates a path at runtime which can
+be used to find properties and methods on the object through
+the inherritance chain.
+</p><p>
+Prototypal inherritance is something which comes from the 
+language 'self'. There are only two ways of programming in an
+object orriented way, the first is classical OOP the way we 
+all know and *shivers* love in C#. Twenty years later, 
+developed by industry giants we get this new form called 
+prototypal inherritance. This was not done out of ignorance,
+but because these people really thought it was better...and 
+it is.
+</p><p>
+Without going into too much detail about the history and the
+art of programming I want to spend a little time on this
+subject. Before you start programming in a classical language
+you need to know the entire taxonomy if the system. The other
+option is continuous refactoring. With JavaScript, when you
+program correctly in JavaScript, you do not have these issues.
+Your objects evolve and shift naturally and you can focus on 
+the most important parts of your code and that is the system
+and it's functionality.
+</p>

@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;   
+}
+
+body { 
+    background: #e3e3e3;
+}
+
+.content {
+    width: 960px;
+    padding: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    
+    background: white;
+}
+
+p.remark {
+    font-style: italic;
+    margin-left: 60px;
+    margin-right: 60px;
+    border-left: 3px solid #62a1eb;
+    padding-left: 10px;
+}
+p.remark:before {
+    content: 'REMARK: ';
+    text-transform: capitalize;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.output {
+    display: none;
+    
+    position:fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.output.show {
+    display: block;
+}
+
+.output .message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    
+    background: white;
+    height: 300px;
+    width: 700px;
+    
+    margin-left: -350px;
+    margin-top: -150px;
+    
+    border-radius: 15px;
+    border: 1px solid gray;
+    
+    padding: 15px;
+    text-align: center;
+    word-wrap: normal;
+    
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.show-output {
+    display: inline-block;
+    margin-top: 10px;
+    float: right;
+    margin-right: 37px;
+    
+    background: rgba(255, 255, 255, 0.3);
+    color: #FFF;
+    border: 0;
+}
+
+.presentation-mode-toggle {
+    position: fixed;
+    right: 20px;
+    top: 45px;
+}
+
+.next-pre {
+    position: fixed;
+    left: 40px;
+    top: 45px;
+}
+.previous-pre {
+    position: fixed;
+    left: 10px;
+    top: 45px;
+}
+
+.next-page {
+    position: fixed;
+    right: 10px;
+    bottom: 20px;
+}
+.previous-page {
+    position: fixed;
+    left: 10px;
+    bottom: 20px;
+}
+
+code {
+    display: inline-block;
+    background: lightgray;
+    font-size: 16px;
+    padding: 3px 10px 3px 10px;
+}
+xmp {
+    margin: 0;
+}

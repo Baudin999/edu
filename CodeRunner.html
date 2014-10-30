@@ -1,0 +1,40 @@
+
+
+<html>
+    
+    
+<head>
+    <title>Code Runner</title>
+    <link rel="stylesheet" href="bower_components/google-code-prettify/styles/sunburst.css" />
+    <link rel="stylesheet" href="styles/prettify_carlos.css" />
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body data-ng-controller="mainCtr">
+    
+    <div class="top-bar">
+        <ul>
+            <li class="menu-item"
+                data-ng-repeat="page in pages" 
+                data-ng-click="selectPage( page )">{{ page.title }}</li>
+        </ul>
+    </div>
+    
+    <div class="content"></div>
+    <div class="output"><div class="message"></div></div>
+    <button type="button" class="presentation-mode-toggle">P</button>
+    <button type="button" class="next-pre">+1</button>
+    <button type="button" class="previous-pre">-1</button>
+    <button type="button" class="previous-page">previous</button>
+    <button type="button" class="next-page">next</button>
+    
+    
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/google-code-prettify/bin/prettify.min.js"></script>
+    <script src="Scripts/script.js"></script>
+    <script src="Scripts/CodeRunner.js"></script>
+    <script src="Scripts/angular-script.js"></script>
+</body>
+
+</html>

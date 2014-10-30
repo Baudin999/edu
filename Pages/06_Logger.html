@@ -1,0 +1,66 @@
+<h1>A simple logger</h1>
+
+<p>
+    It is always hard to come up with examples which are not so verbose as 
+    to obstruct the quality of the lesson and yet are not cosidered demo-ware.
+    In this next section we will try to implement a logger. 
+</p><p>
+    Because this is an AngularJS course we'll call this logger '$log'. This
+    name has no other basis then to just give you some familliarity with the 
+    $log object in AngularJS.
+</p>
+
+<pre>
+/* The constructor function */
+function $log (options) {
+
+    /* Manipulate the options and freeze them */
+    options = options || {};
+    options.createdOn = new Date();
+    options.history = options.history || [];
+    Object.freeze( options );
+
+    this.info = function() {
+        var args = Array.prototype.slice.call(arguments, 0),
+            logString;
+        
+        args.unshift( options.history.length + 1 );
+        $log.info.apply(this, args).forEach( function(item) {
+            options.history.push( item );
+        } );
+    }
+};
+$log.info = function (index) {
+    var args, logStrings;
+    if (typeof index === 'number') {
+        args = Array.prototype.slice.call(arguments, 1);
+    }
+    else {
+        args = Array.prototype.slice.call(arguments, 0);
+    }
+    
+    logStrings = args.map(function (arg, i) {
+        return (index + i) + ' - ' + arg.toString();
+    });
+    
+    console.log(logStrings.join(', '));
+    
+    return logStrings;
+};
+
+/* take the logger for a spin!! */
+var logger = new $log();
+logger.info('Peter', 'Pan');
+logger.info('Wendy');
+logger.info('Hook');
+</pre>
+
+<p>
+    This logger can be used in two ways. The first is by just calling the static
+    method 'info' and passing it zero or more arguments. The second way is to 
+    call the constructor function and use the 'info' method on this newly created
+    object the constructor returns. This will also keep a history of items logged.
+</p><p>
+    Through AngularJS we can easilly make this object into a singleton and thus
+    keep the logged items throughout the session.
+</p>

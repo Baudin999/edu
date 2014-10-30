@@ -1,0 +1,107 @@
+
+<h1>Declarative programming</h1>
+<p>
+Declarative programming is not something which can be explained
+easilly. It is something which you must develop feeling for over
+the course of many years. The short description is: "Do not tell 
+the computer how to do it, tell it what to do."
+</p><p>
+So in the case of the reduce we told the computer that we wanted
+to reduce the array of arguments to a single integer by 
+multiplying the current value by the next value. How the computer
+then runs through the list is no longer our problem. It might
+parallelize the execution or send it off to some server, we don't
+know and we should not care!
+</p>
+
+<p class="remark"> 
+  In the next segment I will use very terse notation, this is not 
+  because I do not want people to be able to read my code, but it
+  is because this is the type of code we'll be seeing a lot in 
+  librairies from other sources.
+</p>
+
+<p>
+Here is a list of the different array opperations which you can
+natively do in JavaScript and which should always take president
+over the 'for' loop:
+</p>
+
+<h2>Array.prototype.forEach</h2>
+<p>
+    The method 'forEach' iterates through a colletion, in JavaScript
+    this is always an Array. Now as you can see it is not possible to 
+    directly manipulate the Array, but, the forEach function can take
+    three parameters, the first one is the currently iterated item, 
+    the second is the index of the item in the Array and the third is
+    the original Array. Armed with this information you can changed the
+    n'th element of the original Array and so manipulate it.
+</p>
+<p class="remark">
+    Manipulating an array with 'forEach' is not something which is 
+    considered 'good practice'. Because of the Functional nature of 
+    JavaScript it is adviced to think of objects as being 'immutable'
+    this will give you a better way of working with objects and an
+    overall more stable application.
+</p>
+
+<pre>
+var namesArray = ['Carlos', 'Siegert', 'Bjorn', 'Ferdinand']; 
+console.log(
+    (function (names) {
+        names.forEach(function (item, index, theOriginalArray) {
+            theOriginalArray[index] = index + '  ' + item;
+        });
+        return names;
+    }(namesArray)));
+</pre>
+
+<h2>Array.prototype.map</h2>
+<p>
+    The method 'map' is one of those methods which are really hard to
+    start using, but once you do you'll never look back. Some people
+    would tell you that you should not use 'forEach' but always use 
+    'map'. This of course is silly. You use map when you want to map
+    your current Array onto a new array. The 'map' function returns
+    an Array. You could think of this as a 'Select' method in C#'s Linq.
+</p>
+<p>
+    The 'map' function does not alter the original list in any way, making \
+    it safe to use in an immutable environment.
+</p>
+<pre>
+var namesArray = ['Carlos', 'Siegert', 'Bjorn', 'Ferdinand']; 
+console.log(
+    (function (names) {
+        return names.map(function (name, index) {
+            return index + '  ' + name; 
+        });
+    }(namesArray)));
+</pre>
+
+<h2>Array.prototype.some</h2>
+<p>
+    The 'some' function stops looping the first time the handler returns true.
+</p>
+<pre>
+(function (numbers) {
+    numbers.some(function (number) {
+        console.log( number );
+        return number % 5 === 0;
+    });
+}([1,2,3,4,5,6,7,8,9]));
+</pre>
+
+<h2>Array.prototype.every</h2>
+<p>
+The 'every' function stops looping the first time the handler returns true.
+</p>
+<pre>
+(function (numbers) {
+    numbers.every(function (number) {
+        console.log( number );
+        return number % 5 !== 0;
+    });
+}([1,2,3,4,5,6,7,8,9]));
+</pre>
+
