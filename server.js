@@ -20,6 +20,6 @@ app.use('/', function (req, res) {
 });
 
 
-var server = app.listen(1336, function () {
+var server = app.listen(process.env.PORT || 1336, function () {
   console.log('Example app listening at http://localhost:1336')
 });
