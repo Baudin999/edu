@@ -55,5 +55,30 @@ tutorial I will introduce NodeJS as a high concurrency web server
 which is easy to create and has very low complexity.
 </p>
 
+<h2>Equality</h2>
+<p class="remark">To quote the godfather of JavaScript Douglass Crockford:</p>
+<p>
+    JavaScript has two sets of equality operators: === and !==, and their evil twins == and !=. The good ones work
+    the way you would expect. If the two operands are of the same type and have the same value, then === produces
+    true and !== produces false. The evil twins do the right thing when the operands are of the same type, but if
+    they are of different types, they attempt to coerce the values. the rules by which they do that are complicated
+    and unmemorable. These are some of the interesting cases:
+</p>
+<pre class="ignore">
+    '' == '0'           // false
+    0 == ''             // true
+    0 == '0'            // true
 
+    false == 'false'    // false
+    false == '0'        // true
 
+    false == undefined  // false
+    false == null       // false
+    null == undefined   // true
+
+    ' \t\r\n ' == 0     // true
+</pre>
+<p>
+    The lack of transitivity is alarming. My advice is to never use the evil twins. Instead, always use === and !==.
+    All of the comparisons just shown produce false with the === operator.
+</p>

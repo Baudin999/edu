@@ -1,27 +1,38 @@
 <h1>Objects</h1>
 
 <p>
-    Objects in JavaScript might be the second most disliked feature of 
-    the language. JavaScript uses prototypal inherritance instead of the 
-    classical inherritance which we know form languages like C# and Java. 
-    JavaScript does not have classes. Classes "define" the type of an 
-    object. In JavaScript you just create the objects and if and only if
-    there is rason for inheritance you inherit.
+    Objects in JavaScript might be the second most disliked feature of the language. JavaScript uses prototypal
+    inheritance instead of the classical inheritance which we know form languages like C# and Java. JavaScript
+    does not have classes. Classes "define" the type of an object. In JavaScript you just create the objects and
+    if and only if there is reason for inheritance you inherit.
 </p>
 <p>
-    This concept can seem very 'brittle' and hard to create and maintain,
-    but as you will see in this chapter, nothing is further from the truth.
-    We we actually come to see that creating and manipulating objects in 
-    JavaScript is very easy and is in all aspects 'better' then the classical
-    way of thinking.
+    This concept can seem very 'brittle' and hard to create and maintain, but as you will see in this chapter, nothing
+    is further from the truth. We we actually come to see that creating and manipulating objects in JavaScript is
+    very easy and is in almost all aspects 'better' then the classical way of thinking.
 </p>
 <p>
-    In JavaScript we can create an object by just typing it out; this is 
-    called an object literal:
+    In JavaScript we can create an object by just typing it out; this is called an object literal:
 </p>
 <pre class="ignore">
     var newObject = {};
 </pre>
+<p>
+    Before we continue with our code examples we need to address the elephant in the room. 'Dynamic languages' vs.
+    'Static languages'. A static language is a language where once a variable is bound to a type you cannot change
+    the type of this variable any more. For example, this is not allowed in C# but very valid in JavaScript:
+</p>
+<pre class="ignore">
+    var foo = 2;
+    foo = 'hi!';
+</pre>
+<p>
+    This is the only difference between static and dynamic languages. This is a reason why IDEs have such a hard
+    time providing intellisense and other tooling for the real dynamic languages. Another reason why it's hard to
+    provide good tooling is that you never know, until runtime, which properties are on your object. Later on I will
+    provide a few examples:
+</p>
+
 <p>
     Members can be added seperated by a comma:
 </p>
@@ -51,17 +62,68 @@
     newObject.showName();
 </pre>
 <p class="remark">
-    This is a very powerfull feature and as always, with great power
-    comes great responsibility. To again quote Douglass Crockford: 
-    "Please don't be stupid with this, because you can get very
-    stupid with this!".
+    This is a very powerfull feature and as always, with great power comes great responsibility. To again quote
+    Douglass Crockford: "Please don't be stupid with this, because you can get very stupid with this!".
 </p>
+<p>
+    We can also use <code>Object.create</code> to create an object in JavaScript. Object.create also gives
+    us a chance to introduce inheritance of objects:
+</p>
+<pre class="">
+    var newObject = Object.create(null);
+    console.log( JSON.stringify( newObject.__proto__ ) || 'Nothing...' );
+
+    var newObject2 = Object.create({});
+    console.log( JSON.stringify( newObject2.__proto__ ) );
+</pre>
+<p>
+    If we wanted to let the new object share some properties from a parent object we could do:
+</p>
+<pre>
+    var base = { title: 'Something' };
+    var child = Object.create( base );
+    console.log( child.title );
+</pre>
+<p>
+    This method is fairly safe to use, for example when we change the child's property <code>title</code> we do not
+    change the parent's <code>title</code>. The following code illustrates this.
+</p>
+<pre>
+    var base = { title: 'Something' };
+    var child = Object.create( base );
+    child.title = 'Changed by child';
+    console.log( base.title );
+</pre>
+<p>
+    <code>Object.create</code> also takes a second optional parameter and this is a set of properties defined with a
+    property description object and these properties will also be added to your object. Further into this tutorial we
+    will look at these property description object.
+</p>
+<pre>
+    var base = { title: 'A car' };
+    var field = 'Mustang'
+    var copySource = {
+        spec: {
+            enumerable: true,
+            get: function () {
+                return field;
+            },
+            set: function (value) {
+                field = value;
+            }
+        }
+    };
+    var child = Object.create( base, copySource );
+    console.log( child.spec );
+
+</pre>
+
 
 <h2>Dynamic functions</h2>
 <p>
     Just like properties you can add functions to an object at runtime.
     There is however another syntax you can use to define functions on
-    an object:
+    an object, this is a part of the property description object:
 </p>
 <pre>
     var o = {};
@@ -75,8 +137,8 @@
 </pre>
 <p>
     In JavaScript we can use any string as a member name. In ES6 we can 
-    use any object to define a memeber. This will bring some interresting
-    pattern to the language.
+    use any object to define a member. This will bring some interesting
+    patterns to the language.
 </p>
 
 <h2>Getters and Setters</h2>
@@ -210,7 +272,22 @@
 </pre>
 
 <p>
-Now lets get back to our object and see of what type this object is:
+    <b>Side note:</b> Do not use <code>parseInt</code> unless you know what you're doing. With <code>parseInt</code>
+    you can specify a radix for your number system, and it used to default to 8 instead of 10; so people tend to get
+    really confused about casting strings to numbers. A better way would be to use the following:
+</p>
+<pre>
+    console.log( Number('12') );
+    // or even shorter:
+    console.log( +'21' );
+    // and rounding decimals:
+    console.log( Number( '12.2345678' ).toFixed( 4 ) );
+</pre>
+
+
+<p>
+    As you can see, even casting in JavaScript is pain and simple! Now lets get back to our objects and see of what
+    type they are:
 </p>
 <pre>
     var person = {};
@@ -218,19 +295,16 @@ Now lets get back to our object and see of what type this object is:
 </pre>
 
 <p>
-As we can see, person is of type 'object'. But what if we wanted
-to be more specific? 'object' is quite general and maybe we'll 
-want to make some decisions based on the type of the object.
-</p><p>
-Here we get to constructor functions. A constructor function is
-a function which automatically gets a new object as it's function
-context (we'll discuss function context in the next chapter). 
-If it does not return an object it returns it's function context.
-Lets see how this works:
+    As we can see, person is of type 'object'. But what if we wanted to be more specific? 'object' is quite general and
+    maybe we'll want to make some decisions based on the type of the object.
+</p>
+<p>
+    Here we get to constructor functions. A constructor function is a function which automatically gets a new object
+    as it's function context (we'll discuss function context in the next chapter). If it does not return an object it
+    returns it's function context. Lets see how this works:
 </p>
 
 <h2>Custom types</h2>
-
 <pre>
     function Human () {}
     var human = new Human();
@@ -238,8 +312,7 @@ Lets see how this works:
 </pre>
 
 <p> 
-This still prints out 'object'. But wait, we have another keyword
-in JavaScript called 'instanceof' which might help:
+    This still prints out 'object'. But wait, we have another keyword in JavaScript called 'instanceof' which might help:
 </p>
 <pre>
     function Human () {}
