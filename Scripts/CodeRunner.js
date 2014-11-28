@@ -1,3 +1,5 @@
+
+
 $(function() {
             "use strict";
             
@@ -78,7 +80,7 @@ $(function() {
                         _output = [];
                     }
                     else {
-                        text = $($(args[0].currentTarget).next()).text();
+                        text = $($(args[0].currentTarget).next())[0].innerText;
                         text = text.replace(/console.log\(/g,'printOutput(');
                         result = eval(text);
                         $('.message').html( _output.join(' <br /> ') );

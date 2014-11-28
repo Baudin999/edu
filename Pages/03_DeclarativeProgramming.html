@@ -1,48 +1,44 @@
 
 <h1>Declarative programming</h1>
 <p>
-Declarative programming is not something which can be explained
-easilly. It is something which you must develop feeling for over
-the course of many years. The short description is: "Do not tell 
-the computer how to do it, tell it what to do."
-</p><p>
-So in the case of the reduce we told the computer that we wanted
-to reduce the array of arguments to a single integer by 
-multiplying the current value by the next value. How the computer
-then runs through the list is no longer our problem. It might
-parallelize the execution or send it off to some server, we don't
-know and we should not care!
+    Declarative programming is not something which can be easily explained. It is something which you must develop
+    feeling for over the course of many years. The short description is: "Do not tell the computer how to do it, tell
+    it what to do."
+</p>
+<p>
+    So in the case of the reduce we told the computer that we wanted to reduce the array of arguments to a single
+    integer by multiplying the current value by the next value. How the computer then runs through the list is no
+    longer our problem. It might parallelize the execution or send it off to some server, we don't know and we should
+    not care!
 </p>
 
 <p class="remark"> 
-  In the next segment I will use very terse notation, this is not 
-  because I do not want people to be able to read my code, but it
-  is because this is the type of code we'll be seeing a lot in 
-  librairies from other sources.
+    In the next segment I will use very terse notation, this is not  because I do not want people to be able to read my
+    code, but it is because this is the type of code we'll be seeing a lot in libraries from other sources.
 </p>
 
 <p>
-Here is a list of the different array opperations which you can
-natively do in JavaScript and which should always take president
-over the 'for' loop:
+    Here is a list of the different array operations which you can natively do in JavaScript and which should always
+    take president over the 'for' loop:
 </p>
 
 <h2>Array.prototype.forEach</h2>
 <p>
-    The method 'forEach' iterates through a colletion, in JavaScript
-    this is always an Array. Now as you can see it is not possible to 
-    directly manipulate the Array, but, the forEach function can take
-    three parameters, the first one is the currently iterated item, 
-    the second is the index of the item in the Array and the third is
-    the original Array. Armed with this information you can changed the
-    n'th element of the original Array and so manipulate it.
+    The method 'forEach' iterates through a collection, in JavaScript this is always an Array. Now as you can see it
+    is not possible to directly manipulate the Array, but, the forEach function can take three parameters, the first
+    one is the currently iterated item, the second is the index of the item in the Array and the third is n'th element
+    of the original Array and so manipulate it.
 </p>
 <p class="remark">
-    Manipulating an array with 'forEach' is not something which is 
-    considered 'good practice'. Because of the Functional nature of 
-    JavaScript it is adviced to think of objects as being 'immutable'
-    this will give you a better way of working with objects and an
-    overall more stable application.
+    Manipulating an array with 'forEach' is not something which is considered 'good practice'. Because of the
+    Functional nature of JavaScript it is advised to think of objects as being 'immutable' this will give you a
+    better way of working with objects and an overall more stable application. In our section on OOP we'll take
+    a closer look at working with 'locked' or 'immutable' objects.
+</p>
+
+<p>
+    This next example demonstrates manipulating the original array, try to never, ever do this! But if you need to;
+    here's the code:
 </p>
 
 <pre>
@@ -58,16 +54,13 @@ console.log(
 
 <h2>Array.prototype.map</h2>
 <p>
-    The method 'map' is one of those methods which are really hard to
-    start using, but once you do you'll never look back. Some people
-    would tell you that you should not use 'forEach' but always use 
-    'map'. This of course is silly. You use map when you want to map
-    your current Array onto a new array. The 'map' function returns
-    an Array. You could think of this as a 'Select' method in C#'s Linq.
+    The method 'map' is one of those methods which are really hard to start using, but once you do you'll never look
+    back. Some people would tell you that you should not use 'forEach' but always use 'map'. This of course is silly.
+    You use map when you want to map our current Array onto a new array. The 'map' function returns an Array. You
+    could think of this as a 'Select' method in C#'s Linq.
 </p>
 <p>
-    The 'map' function does not alter the original list in any way, making \
-    it safe to use in an immutable environment.
+    The 'map' function does not alter the original list in any way, making it safe to use in an immutable environment.
 </p>
 <pre>
 var namesArray = ['Carlos', 'Siegert', 'Bjorn', 'Ferdinand']; 
@@ -104,4 +97,72 @@ The 'every' function stops looping the first time the handler returns true.
     });
 }([1,2,3,4,5,6,7,8,9]));
 </pre>
+
+<h2>Taking declarative programming one step further</h2>
+<p>
+    Declarative programming goes deeper then just the functions on arrays. In JavaScript we can use object notation to
+    create a declarative definition of our 'pipelines' and JavaScript being the dynamic language that it is will reap
+    it's fruit right off the bat. Let's look at an example:
+</p>
+
+<pre>
+    var process = [
+        {
+            index: 0, action: 'getEmptyCustomer', description: 'Get a default empty customer',
+            validation: [
+                { field: 'firstName', test: 'required' }
+            ]
+        },
+        {
+            index: 1, action: 'saveCustomer'
+        }
+    ];
+
+    var context = {
+        getEmptyCustomer: function () {
+            return { firstName: 'Peterson' };
+        },
+        saveCustomer: function (customer) {
+            customer.saved = true;
+            console.log( JSON.stringify( customer, null, 4 ) );
+            return true;
+        },
+        validate: function (target) {
+            if (this.test === 'required') {
+                return target[this.field] !== undefined && target[this.field] !== null;
+            }
+            else {
+                return true;
+            }
+        }
+    };
+
+    process
+        .sort(function(step_a, step_b) {
+            return step_a.index - step_b.index;
+        }).map(function(step) {
+            context.result = context[step.action].call(step, context.result);
+            if (step.validation && step.validation.length > 0) {
+                step.validation.forEach(function(rule) {
+                    context.validate.call(rule, context.result);
+                });
+            }
+        });
+</pre>
+<p class="remark">
+    Imagine this code in C#, we would have to create multiple classes, use generics for type safety and create a
+    whole mess of calls and reflection to manage this simple example.
+</p>
+<p>
+    Now take this one step further and add our decorated log function from the previous chapter and use this
+    function to log out our message. In our current example I know that our parameter is an object. Our logger
+    does not know this. I could write a decorator which can transform the object to a string and pass this as the
+    message.
+</p>
+
+<p>
+    This chapter shows how easy it is to program in another paradigm when using JavaScript. In the next chapters we
+    will look at individual 'tricks' used in this code. The next chapter will look at the first construct used; Arrays!
+</p>
+
 

@@ -1,20 +1,20 @@
 
 <h1>Functional programmming</h1>
 <p>
-Functional programming is one of those terms which is used to 
-describe a way of programming in which functions are the main
-aspects of the language. In JavaScript there is no difference 
-between a function and an object other than that a function can
-be invoked and an object can't.
-</p><p class="remark">
-Functions will be discussed at length later on in this tutorial,
+    Functional programming is one of those terms which is used to describe a way of programming in which functions are
+    the main aspects of the language. In JavaScript there is no difference between a function and an object other than
+    that a function can be invoked and an object can't.
+</p>
+
+<p class="remark">
+    Functions will be discussed at length later on in this tutorial,
 I will now focus on some aspects which are needed in order to get 
 rolling with JavaScript.
 </p>
 
 <p>
 JavaScript does not require you to stick to the signature of your
-function. And because it is loosly typed there is no return type
+function. And because it is loosely typed there is no return type
 specified. The following example shows how to define a function in
 JavaScript:
 </p>
@@ -22,25 +22,40 @@ JavaScript:
 <pre class="ignore">
 function multiply (x, y) {
     return x * y;
-};
+}
 </pre>
 
 <p>
-Just like every other statement in JavaScript we end function
-statements and function expressions with a semicolon. JavaScript
-has automatic semicolon insertion but you would be well adviced 
-to discount that feature and add the semicolos yourself. 
-
-You invoke the method as folows:
+    Just like every other expression in JavaScript we end function expressions with a semicolon. JavaScript has
+    automatic semicolon insertion but you would be well advised to discount that feature and add the semicolons
+    yourself. You can invoke the method as follows:
 </p>
 
 <pre>
 function multiply (x, y) {
     return x * y;
-};
+}
 var multiplicationOfNumbers = multiply( 3, 4 );
 console.log( multiplicationOfNumbers );
 </pre>
+
+<p>
+    Compare this to:
+</p>
+
+<pre>
+function multiply (x, y) {
+    return
+        x * y
+}
+var multiplicationOfNumbers = multiply( 3, 4 );
+console.log( multiplicationOfNumbers || 'undefined' )
+</pre>
+
+<p>
+    The problem with the second piece of code is that automatic semicolon-insertion came in and inserted a semicolon
+    right after the return statement, resulting is a return value of 'undefined'.
+</p>
 
 <p>
 Because you do not have to specify the number of arguments of a
@@ -57,7 +72,7 @@ function multiply2 () {
         result = result * arguments[i];
     }
     return result;
-};
+}
 
 console.log( multiply2(2,3,4) );
 </pre>
@@ -73,8 +88,8 @@ console.log( multiply2(2,3,4) );
     Here is a code snippet which will transform the 'arguments' member of
     a function to an actual Array; do not worry if you cannot follow the 
     reasoning of this function. Just think of it as 'strange' way of calling
-    a method of an object. We will discuss this syntax when we look at the 
-    'this' parameter.
+    a method on an object. We will discuss this syntax when we look at the
+    'this' parameter and OOP.
 </p>
 <pre>
 var args = Array.prototype.slice.call(arguments, 0);
@@ -84,8 +99,7 @@ Because JavaScript is a functional language (not a pure functional
 language, but a functional language none the less) we should write
 our code more declaratively. So in this case we could reduce the 
 list of arguments, but first we'd need to create an array from the
-arguments. This is very strange and don't worry about the syntax 
-yet, we'll get to this cast in a later chapter.
+arguments.
 </p>
 
 <pre>
@@ -93,14 +107,68 @@ yet, we'll get to this cast in a later chapter.
 * Multiply an array of numbers with each other
 */
 function multiply3 () {
-    /* force the 'arguments' into an Array. */
+    // force the 'arguments' into an Array.
     var args = Array.prototype.slice.call(arguments, 0);
     
-    /* reduce the args into a single return value */
+    // reduce the args into a single return value
     return args.reduce(function (a, b) {
         return a * b;
     }, 1);
-};
+}
 
 console.log( multiply3( 2, 3, 4, 10 ) );
 </pre>
+
+<p>
+    Functions are real entities in JavaScript we can pass them as parameters to other functions and return them
+    as return values from functions. The next example shows a common pattern in JavaScript, this decorates a function
+    with some helper information:
+</p>
+
+<pre>
+function log (message) {
+    console.log( message );
+}
+
+function dateDecorator () {
+    var originalLogger = log;
+
+    log = function (message) {
+        message = new Date() + ': ' + message;
+        originalLogger( message );
+    };
+};
+
+dateDecorator();
+log( 'Hello World' );
+
+</pre>
+
+<p>
+    Because functions live within the scope of your application you can invoke them immediately after creating them,
+    this next pattern is called a <i>self executing function</i>.
+</p>
+
+<pre>
+(function log (message) {
+    console.log( message ) ;
+}('execute'));
+</pre>
+
+<p>
+    The extra parentheses around the function are necessary but their position can vary. By convention we put them
+    around the function and the parameter with which they are called. But you will encounter the following:
+</p>
+
+<pre>
+(function log (message) {
+    console.log( message ) ;
+})('execute');
+</pre>
+
+<p class="remark">
+    We will certainly find this convention broken in jQuery libraries. There are many ways to achieve separation in
+    your code and there are even more ways to make your code unreadable in JavaScript. We should always follow strict
+    coding standards with JavaScript or we'll quickly run into maintenance problems.
+</p>
+
