@@ -9,13 +9,15 @@
 
 {{title}}
 
-<ul>
 
-    <select data-ng-model="template">
+<form>
+    <select data-ng-model="template" title="Display type">
         <option value="./personTemplate.html">List</option>
         <option value="./personBlockTemplate.html">Block</option>
     </select>
+</form>
 
+<ul>
     <li data-ng-repeat="person in people"
         data-ng-include="template"></li>
 </ul>

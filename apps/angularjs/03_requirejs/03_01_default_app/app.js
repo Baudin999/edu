@@ -1,5 +1,12 @@
 
-define([], function() {
+require.config({
+    paths: {
+        'angular': '../../../../bower_components/angular/angular'
+    }
+});
+
+
+define(['angular'], function() {
     var app = angular.module('app', []);
 
    require(['./MainController'], function(MainController) {
