@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Basic AngularJS application</title>
+</head>
+<body data-ng-controller="mainController as app">
+
+{{title}}
+
+<ul>
+    <li data-ng-repeat="person in people"
+        data-ng-if="person.active">
+
+        {{ person.name }}
+
+    </li>
+</ul>
+
+<script src="../../../../bower_components/angular/angular.js"></script>
+<script>
+
+    var app = angular.module('app', []);
+
+    app.controller('mainController', function($scope) {
+        $scope.title = 'Hello World!';
+        $scope.people = [
+            {name: 'Carlos Kelkboom', active: true},
+            {name: 'Peter Taal', active: false},
+            {name: 'Richard Dijkhoff', active: false},
+            {name: 'VIncent Dercksen', active: true}
+        ];
+    });
+
+</script>
+</body>
+</html>

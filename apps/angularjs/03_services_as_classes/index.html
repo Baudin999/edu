@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Basic AngularJS application</title>
+</head>
+<body data-ng-controller="mainController as app">
+
+<h1>{{ title }}</h1>
+<p>
+    {{ description }}
+</p>
+
+<script src="../../../bower_components/angular/angular.js"></script>
+<script>
+
+    var app = angular.module('app', []);
+
+    /**
+     * The main controller.
+     * @param $scope
+     * @param TitleFactory
+     * @param descriptionService
+     * @constructor
+     */
+    function MainController($scope, TitleFactory, descriptionService) {
+        $scope.title = new TitleFactory().title;
+        $scope.description = descriptionService.description;
+    }
+    MainController.$inject = ['$scope', 'TitleFactory', 'descriptionService'];
+
+
+    /**
+     * The Title Factory
+     * @constructor
+     */
+    function TitleFactory() {
+        this.title = 'Title from my custom class!!';
+    }
+    TitleFactory.$factory = function () {
+        return TitleFactory;
+    };
+    TitleFactory.$inject = ['$timeout'];
+
+
+    /**
+     * The description service
+     * @constructor
+     */
+    function DescriptionService() {
+        this.description = 'This is the description from the descriptionService class!!';
+    }
+    DescriptionService.$inject = [];
+
+
+    // Hook everything up to the angularJS module
+    app.controller('mainController', MainController);
+    app.factory('TitleFactory', TitleFactory.$factory);
+    app.service('descriptionService', DescriptionService);
+
+</script>
+</body>
+</html>

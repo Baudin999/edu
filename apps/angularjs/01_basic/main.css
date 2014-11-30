@@ -1,0 +1,23 @@
+.active {
+  color: green;
+}
+.inactive {
+  color: red;
+}
+ul {
+  list-style: none;
+}
+ul li {
+  display: block;
+}
+.block {
+  transition: all 0.3s linear;
+  display: inline-block;
+  height: 80px;
+  width: 80px;
+  background: aliceblue;
+}
+.block:hover {
+  background: darkgreen;
+  color: white;
+}
