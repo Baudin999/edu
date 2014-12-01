@@ -12,7 +12,7 @@ $(function() {
                     '/pages/04_ObjectOrientedProgramming.html',
                     '/pages/05_Closures.html',
                     '/pages/06_Logger.html',
-                    '/pages/08_AngularJS.html'
+                    '/pages/angularjs/01_AngularJS.html'
                 ],
                 currentPage = localStorage.getItem('currentPage') || 0,
                 presentationMode = false,

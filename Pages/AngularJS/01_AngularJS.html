@@ -29,21 +29,21 @@
     a simple AngularJS example:
 </p>
 
-<pre class="prettyprint linenums lang-html"><xmp>
+<pre class="ignore prettyprint linenums lang-html"><xmp>
     <html ng-app="app">
         <head>
             <title>First example</title>
         </head>
         <body ng-controller="mainController">
             <h1>{{ title }}</h1>
-            
+
             <script src="bower_components/angular/angular.js"></script>
             <script>
                 angular
-                
+
                     // declare a module
                     .module('app')
-                
+
                     // create a controller
                     .controller('mainController', function($scope) {
                         $scope.title = 'Hello Angular!!';
