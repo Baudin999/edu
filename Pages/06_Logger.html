@@ -21,15 +21,14 @@ function $log (options) {
     Object.freeze( options );
 
     this.info = function() {
-        var args = Array.prototype.slice.call(arguments, 0),
-            logString;
-        
+        var args = Array.prototype.slice.call(arguments, 0);
+
         args.unshift( options.history.length + 1 );
         $log.info.apply(this, args).forEach( function(item) {
             options.history.push( item );
         } );
-    }
-};
+    };
+}
 $log.info = function (index) {
     var args, logStrings;
     if (typeof index === 'number') {

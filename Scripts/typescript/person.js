@@ -14,4 +14,4 @@ define(["require", "exports", './human'], function (require, exports, human) {
     })(human.Human);
     exports.Person = Person;
 });
-//# sourceMappingURL=Person.js.map
+//# sourceMappingURL=person.js.map

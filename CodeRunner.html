@@ -1,4 +1,4 @@
-
+<!DOCTYPE html/>
 
 <html>
     
@@ -15,26 +15,44 @@
     <div class="top-bar">
         <ul>
             <li class="menu-item"
-                data-ng-repeat="page in pages" 
-                data-ng-click="selectPage( page )">{{ page.title }}</li>
+                data-ng-repeat="page in pages"
+                data-ng-class="{ selected: (selectedPage.title === page.title) }"
+                data-ng-click="selectPage( page )">
+                <span>{{ page.title }}</span>
+            </li>
         </ul>
     </div>
-    
-    <div class="content"></div>
+
+    <div class="child-navigation">
+        <ul>
+            <li data-ng-repeat="child in selectedPage.children"
+                data-ng-class="{ selected: (selectedChild.url === child.url) }"
+                data-ng-click="selectChildPage(child)">
+
+                <span class="child-item">{{ child.title }}</span>
+                <span class="index">
+                    {{ $index }}
+                    <span class="index-title">{{ child.title }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div class="content" data-ng-include=" selectedChild.url " onload="contentLoaded()"></div>
     <div class="output"><div class="message"></div></div>
-    <button type="button" class="presentation-mode-toggle">P</button>
-    <button type="button" class="next-pre">+1</button>
-    <button type="button" class="previous-pre">-1</button>
-    <button type="button" class="previous-page">previous</button>
-    <button type="button" class="next-page">next</button>
+
+    <!--<button type="button" class="presentation-mode-toggle">P</button>-->
+    <!--<button type="button" class="next-pre">+1</button>-->
+    <!--<button type="button" class="previous-pre">-1</button>-->
+    <!--<button type="button" class="previous-page">previous</button>-->
+    <!--<button type="button" class="next-page" data-ng-click="nextPage()">next</button>-->
 
 
-    <script src="bower_components/requirejs/require.js" data-main="Scripts/typescript/app.js"></script>
+    <!--<script src="bower_components/requirejs/require.js" data-main="Scripts/typescript/app.js"></script>-->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/google-code-prettify/bin/prettify.min.js"></script>
-    <script src="Scripts/script.js"></script>
-    <script src="Scripts/CodeRunner.js"></script>
+    <!--<script src="Scripts/script.js"></script>-->
+    <!--<script src="Scripts/CodeRunner.js"></script>-->
     <script src="Scripts/angular-script.js"></script>
 </body>
 

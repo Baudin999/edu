@@ -1,5 +1,13 @@
+html {
+    min-width: 1357px;
+}
+
 body {
-    padding: 20px;
+    width: 1160px;
+    margin-left: auto;
+    margin-right: auto;
+
+    min-margin-left: 200px;
 }
 
 .top-bar {
@@ -9,8 +17,8 @@ body {
     right: 0;
     height: 40px;
     
-    background: black;
-    color: white;
+    background: #313131;
+    color: #f5f5f5;
 }
 
 .top-bar ul {
@@ -32,6 +40,81 @@ body {
 }
 
 .top-bar ul li:hover {
-    background: #2abbfc;
-    color: black;
+    text-decoration: underline;
+    color: #81bd03;
+}
+
+.top-bar ul li.selected {
+    color: #81bd03;
+}
+
+.child-navigation, .child-navigation ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.child-navigation ul {
+    list-style: none;
+
+    position: fixed;
+    left: 0px;
+    top: 40px;
+}
+
+.child-navigation ul li {
+    display: block;
+    width: 220px;
+    height: 30px;
+    background: #ebebeb;
+    line-height: 30px;
+
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+.child-navigation ul li .child-item {
+    display: inline;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.child-navigation ul li .index,
+.child-navigation ul li .index .index-title {
+    display: none;
+}
+
+@media screen and (max-width: 1375px){
+    .child-navigation ul li {
+        width: 47px;
+    }
+
+    .child-navigation ul li .child-item {
+        display: none;
+    }
+    .child-navigation ul li .index {
+        display: inline;
+    }
+
+    .child-navigation ul li:hover .index-title {
+        display: inline-block;
+        background: orange;
+        padding: 5px;
+        margin-left: 20px;
+        margin-top: -20px;
+        /*width: 300px;*/
+    }
+}
+
+.child-navigation ul li.selected {
+    background: #d9ebb3;
+    font-weight: bold;
+}
+
+.child-navigation ul li:hover {
+    text-decoration: underline;
+}
+
+.child-navigation ul li.selected:hover {
+    background: #d9ebb3;
+    font-weight: bold;
+    text-decoration: none;
 }
