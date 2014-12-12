@@ -8,10 +8,11 @@
 
 <h1>{{title}}</h1>
 
-<div data-ng-controller="MasterController">
+<div class="master" data-ng-controller="MasterController">
 
-    <div data-ng-controller="DetailsController">
-        {{ masterTitle }}
+    {{ masterTitle }}
+    <div class="detail" data-ng-controller="DetailsController">
+        {{ detailsTitle }} inside {{ masterTitle }}
     </div>
 
 </div>
@@ -20,4 +21,12 @@
         data-main="./app.js"></script>
 
 </body>
+
+
+<style>
+    body { background: yellow; padding: 50px; }
+    .master { background: purple; padding: 50px; }
+    .detail { background: green; padding: 50px; }
+
+</style>
 </html>

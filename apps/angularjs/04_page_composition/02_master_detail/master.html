@@ -1,0 +1,15 @@
+
+
+<div data-ng-controller="MasterController">
+
+    <h2>{{ masterTitle }}</h2>
+
+    <ul>
+        <li data-ng-repeat="person in people"
+            data-ng-click="selectPerson(person)">{{ person.firstName }}</li>
+    </ul>
+
+
+    <div data-ng-include=" 'details.html' "></div>
+
+</div>
