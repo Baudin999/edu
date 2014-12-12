@@ -16,4 +16,4 @@ app.controller('mainController', MainController);
 
 export function init() {
     angular.bootstrap(document, ['app']);
-};
+}

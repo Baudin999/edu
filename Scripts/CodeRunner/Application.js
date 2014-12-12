@@ -14,6 +14,5 @@ define(["require", "exports"], function (require, exports) {
         angular.bootstrap(document, ['app']);
     }
     exports.init = init;
-    ;
 });
 //# sourceMappingURL=Application.js.map

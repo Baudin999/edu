@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Basic AngularJS application</title>
+</head>
+<body data-ng-controller="mainController as app">
+
+<h1>{{title}}</h1>
+
+<div data-ng-controller="MasterController">
+
+    <div data-ng-controller="DetailsController">
+        {{ masterTitle }}
+    </div>
+
+</div>
+
+<script src="../../../../bower_components/requirejs/require.js"
+        data-main="./app.js"></script>
+
+</body>
+</html>
