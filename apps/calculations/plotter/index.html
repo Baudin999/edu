@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Plotter</title>
+    <style>
+        html, body {margin: 0; padding: 0; height: 100%; width: 100%;}
+    </style>
+</head>
+<body>
+
+<canvas id="plotter"></canvas>
+
+
+<script>
+    var numbers = [],
+        mapping = [];
+
+    var plotter = document.getElementById('plotter');
+    plotter.height = document.body.clientHeight;
+    plotter.width = document.body.clientWidth;
+
+    for (var i = 0; i < 2000000; ++i) {
+        numbers.push([1,2,3,4].reduce(function(t, n) {
+            var result = t + (Math.floor(Math.random() * 6)) + 1;
+            if (result > 20) {
+                var exception = Math.floor(Math.random() * 6) + 1;
+                result += (exception === 6) ? (exception + Math.floor(Math.random() * 6) + 1) : exception;
+            }
+            return result;
+        }, 0));
+    }
+
+    numbers.map(function(number) {
+        if (!mapping[number]) {
+            mapping[number] = 1;
+        }
+        else {
+            mapping[number]++;
+        }
+    });
+
+
+    var plotter = document.getElementById('plotter');
+    var ctx = plotter.getContext('2d');
+
+    ctx.beginPath();
+
+    mapping.map(function(number, index) {
+        ctx.lineTo(index * 10, number / 500);
+    });
+
+    ctx.stroke();
+
+</script>
+</body>
+</html>
