@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>By Reference</title>
+</head>
+<body data-ng-controller="mainController as app">
+
+{{title}}
+
+<ul>
+    <li data-ng-repeat="person in people track by $index">{{ person.name }}</li>
+</ul>
+
+<script src="../../../../bower_components/angular/angular.js"></script>
+<script>
+
+    var app = angular.module('app', []);
+
+    app.controller('mainController', function($scope) {
+        $scope.title = 'Hello World!';
+        $scope.people = [];
+
+        _person = {};
+
+        _people = [
+            {name: 'Carlos Kelkboom'},
+            {name: 'Peter Taal'},
+            {name: 'Richard Dijkhoff'},
+            {name: 'Vincent Dercksen'}
+        ];
+
+        for (var i = 0; i < _people.length; ++i) {
+            _person.name = _people[i].name;
+            $scope.people.push( _person );
+        }
+
+    });
+
+</script>
+</body>
+</html>
