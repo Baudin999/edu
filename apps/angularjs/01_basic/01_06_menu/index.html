@@ -1,0 +1,78 @@
+
+<html ng-app="app">
+
+<head>
+    <title>Repeaters</title>
+    <link href="bootstrap.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+    <link href="holy-grail-template-01.css" rel="stylesheet" />
+</head>
+
+
+
+<body>
+
+<div class="top" data-ng-controller="topMenuController">
+    <ul class="topMenu">
+        <li data-ng-repeat="m in menu"
+            data-ng-click="selectMenuItem(m)"
+            data-ng-class="{ selected: selectedMenuItem.title === m.title }">
+            {{ m.title }}
+        </li>
+    </ul>
+</div>
+
+<div class="left" data-ng-controller="leftBarController">
+    <ul class="leftMenu">
+        <li data-ng-repeat="m in menuItem.menuItems"
+            data-ng-click="selectMenuItem(m)"
+            data-ng-class="{ selected: selectedMenuItem.title === m.title }">
+            {{ m.title }}
+        </li>
+    </ul>
+</div>
+
+<div class="content" data-ng-controller="mainController" data-ng-include="template"></div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+<script>
+    var app = angular.module('app', []);
+
+    app.controller('topMenuController', function ($rootScope, $scope) {
+
+        $scope.menu = [
+            { title: 'Home', menuItems: [] },
+            { title: 'File', menuItems: [ { title: 'New' }, { title: 'Open' }, { title: 'Close' } ] },
+            { title: 'Edit', menuItems: [ { title: 'Cut' }, { title: 'Copy' }, { title: 'Paste' } ] },
+            { title: 'Find', menuItems: [ { title: 'Find' }, { title: 'Find next' }, { title: 'Find previous', template: 'includes/findPrevious.html' } ] }
+        ];
+
+        $scope.selectMenuItem = function(menuItem) {
+            $rootScope.$broadcast('menuItemSelected', menuItem);
+            $scope.selectedMenuItem = menuItem;
+        };
+    });
+
+    app.controller('leftBarController', function($rootScope, $scope) {
+        $scope.$on('menuItemSelected', function(event, data) {
+            $scope.menuItem = data;
+        });
+
+        $scope.selectMenuItem = function(menuItem) {
+            $rootScope.$broadcast('subMenuItemSelected', menuItem);
+            $scope.selectedMenuItem = menuItem;
+        };
+    });
+
+    app.controller('mainController', function($scope) {
+        $scope.$on('subMenuItemSelected', function(event, data) {
+            if (!data.template) data.template = 'includes/404.html';
+            $scope.template = data.template;
+        });
+    });
+
+</script>
+
+</body>
+</html>

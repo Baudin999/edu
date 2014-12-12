@@ -22,7 +22,8 @@ app.controller('mainCtr', function ($scope, $timeout, $compile) {
                 { title: 'Arrays', url: '/pages/07_Arrays.html' },
                 { title: 'OOP', url: '/pages/04_ObjectOrientedProgramming.html' },
                 { title: 'Closures', url: '/pages/05_Closures.html' },
-                { title: 'Logger', url: '/pages/06_Logger.html' }
+                { title: 'Logger', url: '/pages/06_Logger.html' },
+                { title: 'Collections', url: '/pages/08_Collections.html' },
             ]
         }, {
             title: 'AJS Intro', url: '/pages/08_AngularJS.html'

@@ -1,0 +1,56 @@
+<h2>Linked list</h2>
+
+<p>
+    Let us start by defining what a linked list is: In computer science, a linked list is a data structure consisting
+    of a group of nodes which together represent a sequence. Under the simplest form, each node is composed of a data
+    and a reference (in other words, a link) to the next node in the sequence; more complex variants add additional
+    links.
+</p>
+<p>
+    Now that we know what a linked list is, lets try and create one in JavaScript. Because JavaScript is a dynamic
+    language we can manipulate objects on the fly:
+</p>
+<pre>
+    function Link(value) {
+        this.value = value;
+    }
+
+    function LinkedList() {
+        var head, end;
+
+        this.push = function(value) {
+            if (!head) {
+                head = new Link(value);
+                end = head;
+            }
+            else {
+                var link = new Link(value);
+                Object.defineProperty(end, 'next', {
+                    enumerable: false,
+                    get: function() {
+                        return link;
+                    }
+                });
+                end = link;
+            }
+        }
+
+        this.first = function() {
+            return head;
+        }
+    }
+
+
+    var linkedList = new LinkedList();
+    linkedList.push(1);
+    linkedList.push(2);
+    linkedList.push(3);
+    linkedList.push(4);
+
+    var node = linkedList.first();
+    while (node) {
+        console.log( node.value );
+        node = node.next;
+    }
+
+</pre>

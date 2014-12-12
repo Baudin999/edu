@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div id="result"></div>
+<ul id="mapping">
+
+</ul>
+
+
+<script>
+
+    document.getElementById('result').innerHTML = 'Calculating';
+    var interval = setInterval(function() {
+        document.getElementById('result').innerHTML = document.getElementById('result').innerHTML + '.';
+    }, 200);
+
+
+    var worker = new Worker('sd.js');
+    worker.addEventListener("message", function (event) {
+
+        clearInterval(interval);
+
+        var result = event.data;
+        var rolles = result.mapping;
+        delete result.mapping;
+
+        var ul = document.getElementById('mapping');
+
+        Object.keys(rolles).map(function(key) {
+            var li = document.createElement('li');
+            li.innerText = key + ' - ' +  rolles[key];
+            ul.appendChild(li);
+        });
+
+
+
+        document.getElementById('result').innerHTML = JSON.stringify(event.data, null, 4);
+
+    }, false);
+    worker.postMessage(20000000);
+
+</script>
+
+
+</body>
+</html>
