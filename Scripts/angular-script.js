@@ -12,7 +12,6 @@ var app = angular.module('app', []);
 app.controller('mainCtr', function ($scope, $timeout, $compile) {
     
     $scope.pages = [
-
         {
             title: 'JavaScript',
             children: [
@@ -21,12 +20,21 @@ app.controller('mainCtr', function ($scope, $timeout, $compile) {
                 { title: 'Declarative programming', url: '/pages/03_DeclarativeProgramming.html' },
                 { title: 'Arrays', url: '/pages/07_Arrays.html' },
                 { title: 'OOP', url: '/pages/04_ObjectOrientedProgramming.html' },
-                { title: 'Closures', url: '/pages/05_Closures.html' },
-                { title: 'Logger', url: '/pages/06_Logger.html' },
-                { title: 'Collections', url: '/pages/08_Collections.html' },
+                { title: 'Closures', url: '/pages/05_Closures.html' }
             ]
         }, {
-            title: 'AJS Intro', url: '/pages/08_AngularJS.html'
+            title: 'Advanced JS',
+            children: [
+                { title: 'Logger', url: '/pages/06_Logger.html' },
+                { title: 'Collections', url: '/pages/08_Collections.html' },
+                { title: 'Currying', url: '/pages/09_Curry.html' }
+            ]
+        }, {
+            title: 'AngularJS',
+            children: [
+                { title: 'MVC', url: '/pages/AngularJS/00_MVC.html' },
+                { title: 'Introduction', url: '/pages/AngularJS/01_AngularJS.html' }
+            ]
         }
     ];
 

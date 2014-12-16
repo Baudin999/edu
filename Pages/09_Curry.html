@@ -1,0 +1,66 @@
+
+<h1>Currying</h1>
+<p>
+In mathematics and computer science, currying is the technique of translating the evaluation of a function that
+takes multiple arguments (or a tuple of arguments) into evaluating a sequence of functions, each with a single
+argument (partial application). It was introduced by Moses Schönfinkel[1][2][3] and later developed by Haskell
+Curry.
+</p>
+
+<p class="remark">
+    With curried functions you get easier reuse of more abstract functions, since you get to specialize. Let's say
+    that you have an adding function...
+</p>
+
+<pre>
+
+    if (typeof Function.curry !== 'function') {
+        Function.method('curry', function() {
+            var args = Array.prototype.slice.apply(arguments),
+            self = this;
+
+            return function() {
+                return self.apply(null, args.concat(Array.prototype.slice.apply(arguments)));
+            }
+        });
+    }
+
+    var add = function(x, y) {
+        return x + y;
+    };
+
+    var addOne = add.curry(1);
+
+    console.log( addOne(2) );
+
+</pre>
+
+<p>
+    Now you may rightfully ask: "Why would I ever need this?"
+    Imagine creating some function which manipulates a DOM element, to be more specific, imagine you wanting to
+    change the innerText of a paragraph element. You want to do this for a given element. Now you could achieve this
+    using closures like so:
+</p>
+<pre class="ignore">
+    var setInnerText = (function ($element) {
+        return function (text) {
+            $element.text(text);
+        }
+    }($('.target')));
+</pre>
+
+<p>
+    Now imagine us currying this:
+</p>
+<pre class="ignore">
+    function setInnerText ($element, text) {
+        $element.text(text);
+    };
+
+    var myTargetElementInnerTextFunction = setInnerText.curry($('.target'));
+</pre>
+<p>
+    Not only is this code much cleaner and better readable. We also think more declaratively. Our
+    <code>setInnerText</code> function is exactly what we would like it to be. Our partial application is readable and
+    the total is more maintainable.
+</p>

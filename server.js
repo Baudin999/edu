@@ -14,6 +14,9 @@ app.post('/people', function (req, res) {
 });
 
 app.use(express.static(__dirname + '/'));
+app.use(function(req, res) {
+    res.status(404).send('Page not Found');
+});
 app.use('/', function (req, res) {
     res.writeHead(302, {'Location': '/CodeRunner.html'});
     res.end();

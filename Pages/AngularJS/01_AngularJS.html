@@ -1,82 +1,83 @@
-<!--<h1>AngularJS</h1>-->
-<!--<img href="https://angularjs.org/img/AngularJS-large.png" />-->
-<!--<p>-->
-    <!--AngularJS is a client side framework which allows us to write-->
-    <!--MVC style applications right in the browser. The reason why -->
-    <!--we would want MVC is that this is a clear and unobtrusive -->
-    <!--pattern which we can use to structure our application. When -->
-    <!--you write large applications you tend to 'lose' control over-->
-    <!--the location of your files in the project. You also tend to -->
-    <!--need to read more and more code. When you get the chance to-->
-    <!--segment your code into little bit sized peices you can find-->
-    <!--your code faster and be more productive. So in the end we use-->
-    <!--MVC in order to get more productive.-->
-<!--</p>-->
 
-<!--<p class="remark">-->
-    <!--Why AngularJS? HTML is great for declaring static documents, -->
-    <!--but it falters when we try to use it for declaring dynamic -->
-    <!--views in web-applications. AngularJS lets you extend HTML -->
-    <!--vocabulary for your application. The resulting environment -->
-    <!--is extraordinarily expressive, readable, and quick to develop.-->
-<!--</p>-->
+<h1>AngularJS</h1>
+<img href="https://angularjs.org/img/AngularJS-large.png" />
+<p>
+    AngularJS is a client side framework which allows us to write
+    MVC style applications right in the browser. The reason why
+    we would want MVC is that this is a clear and unobtrusive
+    pattern which we can use to structure our application. When
+    you write large applications you tend to 'lose' control over
+    the location of your files in the project. You also tend to
+    need to read more and more code. When you get the chance to
+    segment your code into little bit sized peices you can find
+    your code faster and be more productive. So in the end we use
+    MVC in order to get more productive.
+</p>
 
-<!--<p>-->
-    <!--A standard AngularJS application consists of declarative markup-->
-    <!--combined with backing <i>models</i>. You can extend HTML with-->
-    <!--your own elements and attributes making your markup more -->
-    <!--readable and your application better maintainable. Lets look at-->
-    <!--a simple AngularJS example:-->
-<!--</p>-->
+<p class="remark">
+    Why AngularJS? HTML is great for declaring static documents,
+    but it falters when we try to use it for declaring dynamic
+    views in web-applications. AngularJS lets you extend HTML
+    vocabulary for your application. The resulting environment
+    is extraordinarily expressive, readable, and quick to develop.
+</p>
 
-<!--<pre class="ignore prettyprint linenums lang-html"><xmp>-->
-    <!--<html ng-app="app">-->
-        <!--<head>-->
-            <!--<title>First example</title>-->
-        <!--</head>-->
-        <!--<body ng-controller="mainController">-->
-            <!--<h1>{{ title }}</h1>-->
+<p>
+    A standard AngularJS application consists of declarative markup
+    combined with backing <i>models</i>. You can extend HTML with
+    your own elements and attributes making your markup more
+    readable and your application better maintainable. Lets look at
+    a simple AngularJS example:
+</p>
 
-            <!--<script src="bower_components/angular/angular.js"></script>-->
-            <!--<script>-->
-                <!--angular-->
+<pre class="ignore prettyprint linenums lang-html"><xmp>
+    <html ng-app="app">
+        <head>
+            <title>First example</title>
+        </head>
+        <body ng-controller="mainController">
+            <h1>{{ title }}</h1>
 
-                    <!--// declare a module-->
-                    <!--.module('app')-->
+            <script src="bower_components/angular/angular.js"></script>
+            <script>
+                angular
 
-                    <!--// create a controller-->
-                    <!--.controller('mainController', function($scope) {-->
-                        <!--$scope.title = 'Hello Angular!!';-->
-                    <!--});-->
-            <!--</script>-->
-        <!--</body>-->
-    <!--</html>-->
-<!--</xmp></pre>-->
+                    // declare a module
+                    .module('app')
 
-<!--<p class="remark">-->
-    <!--You can see the fluent implementation on the 'angular' keyword. -->
-    <!--This is because AngualarJS is aware of the Functional nature of-->
-    <!--JavaScript and as such tries to be immutable. Immutable objects-->
-    <!--tend to return new instances of themselves exposing the same-->
-    <!--methods creating a fluent programming interface.-->
-<!--</p>-->
+                    // create a controller
+                    .controller('mainController', function($scope) {
+                        $scope.title = 'Hello Angular!!';
+                    });
+            </script>
+        </body>
+    </html>
+</xmp></pre>
 
-<!--<p>-->
-    <!--Let's look at the different parts of the application because we-->
-    <!--have a lot going on here. First thing to notice is that we include-->
-    <!--angular.js on line 9 of the code. This is where it all starts. To -->
-    <!--understand the execution of a web page we'll need to take a look -->
-    <!--at how flow and reflow work. Suffice it to say that scripts are-->
-    <!--loaded after each other. This is why we do not have to wrap our-->
-    <!--own script in some <code>onload</code> type of wrapper.-->
-<!--</p>-->
+<p class="remark">
+    You can see the fluent implementation on the 'angular' keyword.
+    This is because AngualarJS is aware of the Functional nature of
+    JavaScript and as such tries to be immutable. Immutable objects
+    tend to return new instances of themselves exposing the same
+    methods creating a fluent programming interface.
+</p>
 
-<!--<p>-->
-    <!--For each of these examples I will make a fiddle. As the name suggests-->
-    <!--you can fiddle around with these features. For the big examples I will-->
-    <!--create a github repository and use this repo to set up everything you-->
-    <!--need to get going on your own. Because we cannot controll a fiddle's-->
-    <!--html tag we will have to <i>bootstrap</i> the AngularJS application -->
-    <!--at runtime. We will look at the method once we start building bigger-->
-    <!--applications with more modules and requireJS. -->
-<!--</p>-->
+<p>
+    Let's look at the different parts of the application because we
+    have a lot going on here. First thing to notice is that we include
+    angular.js on line 9 of the code. This is where it all starts. To
+    understand the execution of a web page we'll need to take a look
+    at how flow and reflow work. Suffice it to say that scripts are
+    loaded after each other. This is why we do not have to wrap our
+    own script in some <code>onload</code> type of wrapper.
+</p>
+
+<p>
+    For each of these examples I will make a fiddle. As the name suggests
+    you can fiddle around with these features. For the big examples I will
+    create a github repository and use this repo to set up everything you
+    need to get going on your own. Because we cannot controll a fiddle's
+    html tag we will have to <i>bootstrap</i> the AngularJS application
+    at runtime. We will look at the method once we start building bigger
+    applications with more modules and requireJS.
+</p>
