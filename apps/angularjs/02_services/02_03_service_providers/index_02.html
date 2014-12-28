@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Basic AngularJS application</title>
+</head>
+<body data-ng-controller="mainController as app">
+
+<h1>{{ title }}</h1>
+
+<script src="../../../../bower_components/angular/angular.js"></script>
+<script>
+
+    var app = angular.module('app', []);
+
+    app.config(['titleFactoryProvider', function(titleFactoryProvider) {
+        titleFactoryProvider.setTitle('Carlos was here');
+    }]);
+
+    app.provider('titleFactory', function () {
+        var singleton,
+            title = 'Hello from AngularJS';
+
+        function TitleFactory () {
+            this.title = title;
+        }
+
+        return {
+            $get: function() {
+                if (!singleton) singleton = new TitleFactory();
+                return singleton;
+            },
+            setTitle: function(newTitle) {
+                title = newTitle
+            }
+        };
+
+    });
+
+    app.controller('mainController', function($scope, titleFactory) {
+        $scope.title = titleFactory.title;
+    });
+
+
+</script>
+</body>
+</html>
