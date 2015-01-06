@@ -61,6 +61,7 @@ class App {
     }
 
     resize = function(event) {
+        if (!app) return;
         app.canvas.width = document.body.clientWidth;
         app.canvas.height = document.body.clientHeight;
     }

@@ -4,16 +4,23 @@
     <meta charset="UTF-8">
     <title>Basic AngularJS application</title>
 </head>
-<body data-ng-controller="mainController as app">
+<body data-ng-controller="mainController">
 
 {{title}}
 
 <script src="../../../../bower_components/angular/angular.js"></script>
 <script>
 
+    (function(w) {
+        w.appResources = {
+            mainController: 'mainController'
+        };
+    }(window));
+
+
     var app = angular.module('app', []);
 
-    app.controller('mainController', function($scope) {
+    app.controller(appResources.mainController, function($scope) {
         $scope.title = 'Hello World!';
     });
 

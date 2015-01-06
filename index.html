@@ -1,17 +1,59 @@
-<!DOCTYPE html>
+<!DOCTYPE html/>
+
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+
+
+<head>
+    <title>Code Runner</title>
+    <link rel="stylesheet" href="bower_components/google-code-prettify/styles/sunburst.css" />
+    <link rel="stylesheet" href="styles/prettify_carlos.css" />
+    <link rel="stylesheet" href="styles/main.css" />
 </head>
-<body ng-controller="mainController">
 
-<ul>
-    <li data-ng-repeat="item in [1,2,3,4,5,6,7,8,9,0]">{{item}}</li>
-</ul>
+<body data-ng-controller="mainCtr">
+
+<div class="top-bar">
+    <ul>
+        <li class="menu-item"
+            data-ng-repeat="page in pages"
+            data-ng-class="{ selected: (selectedPage.title === page.title) }"
+            data-ng-click="selectPage( page )">
+            <span>{{ page.title }}</span>
+        </li>
+    </ul>
+</div>
+
+<div class="child-navigation">
+    <ul>
+        <li data-ng-repeat="child in selectedPage.children"
+            data-ng-class="{ selected: (selectedChild.url === child.url) }"
+            data-ng-click="selectChildPage(child)">
+
+            <span class="child-item">{{ child.title }}</span>
+                <span class="index">
+                    {{ $index }}
+                    <span class="index-title">{{ child.title }}</span>
+                </span>
+        </li>
+    </ul>
+</div>
+<div class="content" data-ng-include=" selectedChild.url " onload="contentLoaded()"></div>
+<div class="output"><div class="message"></div></div>
+
+<!--<button type="button" class="presentation-mode-toggle">P</button>-->
+<!--<button type="button" class="next-pre">+1</button>-->
+<!--<button type="button" class="previous-pre">-1</button>-->
+<!--<button type="button" class="previous-page">previous</button>-->
+<!--<button type="button" class="next-page" data-ng-click="nextPage()">next</button>-->
 
 
-<script src=""></script>
-
+<!--<script src="bower_components/requirejs/require.js" data-main="Scripts/typescript/app.js"></script>-->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/google-code-prettify/bin/prettify.min.js"></script>
+<!--<script src="Scripts/script.js"></script>-->
+<!--<script src="Scripts/CodeRunner.js"></script>-->
+<script src="Scripts/angular-script.js"></script>
 </body>
+
 </html>

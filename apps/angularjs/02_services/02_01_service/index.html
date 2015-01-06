@@ -7,6 +7,7 @@
 <body data-ng-controller="mainController as app">
 
 <h1>{{ title }}</h1>
+
 <p>
     {{ description }}
 </p>
@@ -14,20 +15,21 @@
 <script src="../../../../bower_components/angular/angular.js"></script>
 <script>
 
+
     var app = angular.module('app', []);
 
-    app.controller('mainController', function($scope, titleFactory, descriptionService) {
+    app.controller('mainController', function ($scope, titleFactory, descriptionService) {
         $scope.title = titleFactory.title;
         $scope.description = descriptionService.description;
     });
 
-    app.factory('titleFactory', function() {
+    app.factory('titleFactory', function () {
         return {
             title: 'From the factory!!'
         };
     });
 
-    app.service('descriptionService', function() {
+    app.service('descriptionService', function () {
         this.description = 'This is teh description from the descriptionService!!';
     });
 
