@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Person data item</title>
+</head>
+<body data-ng-controller="mainController">
+
+
+<h1>{{ title }}</h1>
+
+<pre>
+{{ person | json }}
+</pre>
+
+
+<pre>
+{{ animal | json }}
+</pre>
+
+
+<script src="../../../../bower_components/angular/angular.js"></script>
+<script>
+
+    angular
+
+        // module
+        .module('app', [])
+
+
+        .controller('mainController', function($scope, Person, Animal) {
+            $scope.title = 'Hello World';
+            $scope.person = Person.init('Carlos');
+            $scope.person.index = 0;
+
+
+            $scope.animal = Animal.init();
+
+        });
+
+
+    setTimeout(function() {
+        angular.bootstrap(document, ['app']);
+    }, 0);
+
+
+</script>
+<script src="Person.js"></script>
+<script src="Animal.js"></script>
+
+
+</body>
+</html>
