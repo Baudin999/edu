@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <style>
+        body, html {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+
+            background: aliceblue;
+            overflow: hidden;
+        }
+
+        #canvas {
+            background: white;
+            paddding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+
+    <script>
+
+        var canvas = document.getElementById('canvas'),
+            ctx = canvas.getContext("2d"),
+            circles = [],
+            colors = ['green', 'yellow', 'blue', 'black', 'red', 'purple', 'white', 'teal', 'aliceblue'];
+
+        circles.push(new Circle());
+
+
+        canvas.addEventListener('click', function(event) {
+            circles.push(new Circle(event.pageX, event.pageY))
+        }, false);
+
+
+        function Circle(x, y) {
+
+            var self = this,
+                x_index = (Math.floor((Math.random() * 10) + 1) % 2) === 0 ? 1 : -1,
+                y_index = (Math.floor((Math.random() * 10) + 1) % 2) === 0 ? 1 : -1,
+                speed = 5,
+                color = colors[circles.length % colors.length];
+
+
+            this.x = x || 50;
+            this.y = y || 50;
+
+
+            this.draw = function() {
+
+                if (self.x >= canvas.width) x_index = -1;
+                if (self.x <= 0) x_index = 1;
+                if (self.y >= canvas.height) y_index = -1;
+                if (self.y <= 0) y_index = 1;
+
+                self.x += x_index * speed;
+                self.y += y_index * speed;
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 20, 0, 2 * Math.PI, false);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.lineWidth = 5;
+                ctx.strokeStyle = '#003300';
+                ctx.stroke();
+            };
+        }
+
+        window.addEventListener('resize', resizeCanvas, false);
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawScene();
+        }
+
+        function drawScene() {
+            ctx.clearRect ( 0 , 0 , canvas.width, canvas.height );
+            circles.forEach(function(circle) {
+                circle.draw();
+            });
+
+            window.requestAnimationFrame(drawScene);
+        }
+
+        resizeCanvas();
+
+
+    </script>
+</body>
+</html>
