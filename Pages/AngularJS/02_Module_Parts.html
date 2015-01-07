@@ -1,0 +1,170 @@
+
+<h1>Module Parts</h1>
+
+<h2>Modules</h2>
+<p>
+    Modules are containers for the different parts of your application. Inspecting a module object at runtime gives us
+    the following members:
+</p>
+
+<img src="Pages/AngularJS/Images/module_inspection.PNG" />
+
+<p>
+    We will look at all of these members in this document. In the code examples we will see examples of how to use
+    most of them. Before we continue we need to filter a few of these members. Following a convention, the members
+    starting with an <code>_</code> are considered private and can be ignored.
+</p>
+<p>
+    The <code>config</code> and <code>run</code> members are actually ways to hook into the run and config phases of
+    an AngularJS application. We will discuss these once we get the basics of AngularJS down.
+</p>
+<p>
+    The <code>provider</code> is a beast we will focus on in the last part of this session. Once you master the provider
+    you will see that the other members (which are all functions) are convenience wrappers for this provider. The only
+    other member we will be ignoring is the <code>animation</code> member, because Animation is out of scope for these
+    session. Our remaining members are:
+</p>
+
+<ol>
+    <li>Values</li>
+    <li>Constant</li>
+    <li>Controller</li>
+    <li>Services</li>
+    <li>Factories</li>
+    <li>Directives</li>
+    <li>Filters</li>
+</ol>
+
+<p>
+    First, lets start by creating a module:
+</p>
+<pre class="ignore">
+    angular.module('name', []);
+</pre>
+
+<p>
+    As you can see a module is easily created. You pass it a name and a list of dependencies. Angular will do the rest.
+    Imagine a second module called <code>Theme</code> (I use a separate module for my themes and ain layout). Our
+    application depends on this <code>Theme</code> module. The code would look something like this:
+</p>
+
+<pre class="ignore">
+    angular.module('theme', []);
+    angular.module('app', ['theme']);
+</pre>
+
+<p>
+    The module function returns the actual module, so you can either store this module in a variable or you can use
+    a fluent syntax to just append calls to the module. Resources defined within module A referenced by module B are
+    callable within module A. In our previous example I could create a value in our theme module and use this value
+    within our application. The following code gives a contrived example:
+</p>
+
+<pre>
+    angular
+        .module('theme', [])
+        .value('profile', { username: 'George', type: 'Monkey', state: 'Curious' })
+
+    angular.module('app', ['theme'])
+        .controller('mainController', function($scope, profile) {
+            $scope.title = profile.state + ' ' + profile.username;
+        });
+
+    /*
+    fiddle: http://jsfiddle.net/pgj05f6f/1/
+    The bootstrapping part is commented out because JSFiddle already bootstraps the application for you!
+    */
+
+</pre>
+
+<iframe style="width: 100%; height: 300px"
+        src="http://jsfiddle.net/pgj05f6f/1/embedded/">
+</iframe>
+
+<p>
+    Another way you can think of a module is thinking of it as a DI container. The members like controller and service
+    are used to register objects on your DI container. The main AngularJS module is called <code>ng</code>. Here you will
+    find things like <code>$http</code> and a reference to the DI container <code>$injector</code>. Later in this
+    series we'll dive deeper into the DI contianer when we discuss <code>$scope</code> and the $digest cycle.
+</p>
+
+<p>
+    With this last example we can jump right into the first member or a module.
+</p>
+
+<h2>Value</h2>
+<p>
+    The value member on a module defines a key/value pair (also called a tuple in functional programming) with you can
+    later retrieve. I use this for values I do not want to mutate 'much' within my application. I also use this to
+    initialize values from the localStorage into my AngularJS application.
+</p>
+
+<p>
+    We can always come back and update the value; the following code example shows this. Don't worry if there are
+    pieces which you cannot follow, you will at the end of this course.
+</p>
+
+<pre class="ignore">
+var app = angular.module('app', []);
+
+angular
+    .module('theme', [])
+    .value('profile', {
+        username: 'George',
+        type: 'Monkey',
+        state: 'Curious'
+    });
+
+angular.module('app', ['theme'])
+    .controller('mainController', function ($scope, $injector, $timeout, profile) {
+        $scope.title = profile.state + ' ' + profile.username;
+
+        $timeout(function () {
+            profile.state = 'Curiousser';
+            angular.module('theme').value('profile', profile);
+
+            $injector.invoke(['profile', function (p) {
+                console.log(p);
+            }]);
+
+        }, 3000);
+    });
+</pre>
+
+<iframe style="width: 100%; height: 300px"
+        src="http://jsfiddle.net/pgj05f6f/5/embedded/">
+</iframe>
+
+<h2>Constant</h2>
+<p>
+    A constant is a constant. This cannot change and is there to remain accessible but not mutable. I almost never use
+    this. I've used it once to define some global UI settings like minimum width and a few colors.
+</p>
+
+<h3>Controller</h3>
+<p>
+    A controller is what makes MVC possible. The Controller is the 'C' part of MVC with the M being model and the 'V'
+    being view. A lot of times I read blogs and items on the internet where people confuse the $scope (which can be
+    passed into a controller through DI) and the 'M' model in MVC. The model is not the $scope but the $scope stitches
+    the model and the view together. It's basically the glue holding the two together. It is also the way change tracking
+    works in AngularJS (also called dirty checking).
+</p>
+
+<h2>Services and Factories</h2>
+<p>
+    I will look at Services and Factories at the same time because the do not differ that much:
+</p>
+<pre class="ignore">
+    app.factory('titleFactory', function () {
+        return {
+            title: 'From the factory!!'
+        };
+    });
+
+    app.service('descriptionService', function () {
+        this.description = 'This is teh description from the descriptionService!!';
+    });
+</pre>
+<p>
+    A factory returns an object. A service has 'this' set to the returning object.
+</p>

@@ -27,7 +27,7 @@
         // module
         .module('app', [])
 
-
+        // the main controller
         .controller('mainController', function($scope, Person, Animal) {
             $scope.title = 'Hello World';
             $scope.person = Person.init('Carlos');
@@ -36,6 +36,10 @@
         });
 
 
+    // we will need to wrap the bootstrapping of the app in a setTimeout
+    // to push it to the end of the execution stack (also called....well...stack)
+    // in order to load both the Person.js and Animal.js files.
+    // This is not the preferred way. Normally we'll use requireJS.
     setTimeout(function() {
         angular.bootstrap(document, ['app']);
     }, 0);

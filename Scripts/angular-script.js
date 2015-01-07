@@ -8,7 +8,6 @@ var printOutput = function(value) {
 
 var app = angular.module('app', []);
 
-
 app.controller('mainCtr', function ($scope, $timeout, $compile) {
     
     $scope.pages = [
@@ -33,7 +32,8 @@ app.controller('mainCtr', function ($scope, $timeout, $compile) {
             title: 'AngularJS',
             children: [
                 { title: 'MVC', url: '/pages/AngularJS/00_MVC.html' },
-                { title: 'Introduction', url: '/pages/AngularJS/01_AngularJS.html' }
+                { title: 'Introduction', url: '/pages/AngularJS/01_AngularJS.html'},
+                { title: 'Module parts', url: '/pages/AngularJS/02_Module_Parts.html' }
             ]
         }
     ];
