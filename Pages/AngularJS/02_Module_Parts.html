@@ -141,7 +141,7 @@ angular.module('app', ['theme'])
     this. I've used it once to define some global UI settings like minimum width and a few colors.
 </p>
 
-<h3>Controller</h3>
+<h2>Controller</h2>
 <p>
     A controller is what makes MVC possible. The Controller is the 'C' part of MVC with the M being model and the 'V'
     being view. A lot of times I read blogs and items on the internet where people confuse the $scope (which can be
@@ -149,10 +149,87 @@ angular.module('app', ['theme'])
     the model and the view together. It's basically the glue holding the two together. It is also the way change tracking
     works in AngularJS (also called dirty checking).
 </p>
+<p>
+    OK, so if controllers are the gateway to the view, how do we hook everything up? We can do this one of three ways.
+</p>
+
+<ol>
+    <li>Reference the controller from the HTML.</li>
+    <li>Use a routing engine (e.g. ngRoute)</li>
+    <li>Create a directive.</li>
+</ol>
+
+<p>
+    This is where we need to talk about single page applications. I think single page is a misnomer. I would like to
+    call them, client centric applications. Meaning that most of the combining of your components and their views
+    happens client side. Using a routing engine is beyond the scope of this course but it is very powerful and should
+    deserve it's own chapter.
+</p>
+
+<p>
+    For now we'll focus on the first and the second options. Seeing how Directives have their own chapter we will be
+    looking at referencing the controller from the HTML. We can hook a controller into a piece of HTML by defining
+    an ngController attribute, this is a directive, on an HTML element.
+</p>
+
+<pre><xmp>
+    <html ng-app="app">
+    <head>
+        <title>A controller</title>
+    </head>
+    <body>
+    <h1 ng-controller="titleController">{{ title }}</h1>
+    <ul ng-controller="listController">
+        <li data-ng-repeat="p in people">{{ p }}</li>
+    </ul>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        angular
+
+            // declare a module
+            .module('app', [])
+
+            // create a title controller
+            .controller('titleController', function($scope) {
+                $scope.title = 'Hello Angular!!';
+            })
+
+            // create a list controller
+            .controller('listController', function($scope) {
+                $scope.people = ['Carlos', 'Vincent', 'Bianca'];
+            });
+    </script>
+    </body>
+    </html>
+</xmp></pre>
+
+<iframe style="width: 100%; height: 300px"
+        src="http://jsfiddle.net/1o47v09z/1/embedded/">
+</iframe>
+<p>
+    As you can see you can have multiple controllers on a single page. They each have a $scope. When you nest a
+    controller inside another controller this nested controller will inherit from the parent controller.
+</p>
+<pre><xmp>
+    <div ng-controller="titleController">
+
+        <h1>{{ title }}</h1>
+        <ul ng-controller="listController">
+            <li data-ng-repeat="p in people">{{ p }} + {{ title }}</li>
+        </ul>
+
+    </div>
+</xmp></pre>
+<iframe style="width: 100%; height: 300px"
+        src="http://jsfiddle.net/036rnjfa/2/embedded/">
+</iframe>
+
+
 
 <h2>Services and Factories</h2>
 <p>
-    I will look at Services and Factories at the same time because the do not differ that much:
+    I will look at Services and Factories at the same time because they do not differ that much:
 </p>
 <pre class="ignore">
     app.factory('titleFactory', function () {
@@ -166,5 +243,80 @@ angular.module('app', ['theme'])
     });
 </pre>
 <p>
-    A factory returns an object. A service has 'this' set to the returning object.
+    A factory returns an object and it's <code>this</code> is set to the window object. A service has <code>this</code>
+    set to the returning object.
 </p>
+<p>
+    We can inject a custom service into another service, factory or controller through Dependency Injection. Here is
+    an example of injecting a calculation service into a controller:
+</p>
+
+<pre class="ignore">
+    angular
+
+        // declare a module
+        .module('app', [])
+
+        .service('diceService', function() {
+            return {
+                rollDice: function rd(numberOfDice) {
+                    if (numberOfDice === 0) return 0;
+                    else return Math.floor((Math.random() * 6) + 1) + rd(numberOfDice -1);
+                }
+            }
+        })
+
+        .controller('mainController', function($scope, diceService) {
+            $scope.roll = function() {
+                $scope.result = diceService.rollDice($scope.numberOfDice);
+            }
+        });
+</pre>
+<iframe style="width: 100%; height: 400px"
+        src="http://jsfiddle.net/8gyrro1o/1/embedded/">
+</iframe>
+
+<p>
+    Because both the service and the factory behave like singletons (at least if you use them like this). We can rely
+    on changes being pushed. This means that we can make asynchronous calls to a backend and update the service when
+    the call returns. Pushing these changes to our UI.
+</p>
+
+<pre class="ignore">
+    angular
+
+        // declare a module
+        .module('app', [])
+
+        .service('titleService', function($timeout) {
+
+            var result = {};
+
+            $timeout(function() {
+                angular.extend(result, {
+                    title: 'Hello form the title service'
+                });
+            }, 3000);
+
+            return result;
+        })
+
+        .controller('mainController', function($scope, $timeout, titleService) {
+            $scope.titleService = titleService;
+        });
+</pre>
+<iframe style="width: 100%; height: 400px"
+        src="http://jsfiddle.net/8gyrro1o/4/embedded/">
+</iframe>
+
+<p>
+    There is a lot more to say about services and factories, but I will continue with the rest of the members of the
+    module. We will revisit the services and factories later in the course.
+</p>
+
+<h2>Directives</h2>
+<p>
+    Directives should and have their own chapter. They are complicated beasts, they are powerful and they are
+    difficult; but worth every second you spend on learning them. They are what make AngularJS powerful and unique.
+</p>
+
