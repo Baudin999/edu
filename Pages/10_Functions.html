@@ -1,0 +1,298 @@
+
+
+<h1>Functions</h1>
+<p>
+    So far we've used functions in JavaScript. What we haven't done is actually <em>look</em> at what they are. In
+    JavaScript objects make up the bones of an application. Functions are the muscles, the way we move the bones around.
+    Imagine the following function:
+</p>
+
+<pre>
+    function add(x, y) {
+        console.log( this === window ? 'window' : 'something else' );
+        return x + y;
+    }
+    add(2, 3);
+</pre>
+
+<p>
+    Now you saw me calling something functions 'constructor functions', the only visible difference was calling it with
+    a <code>new</code> keyword. Lets see what happens when we call an ordinary function with the new key word:
+</p>
+
+<pre>
+    function add(x, y) {
+        console.log( this === window ? 'window' : 'something else' );
+        return x + y;
+    }
+    new add(2, 3);
+</pre>
+
+<p>
+    Somehow the <code>new</code> keyword does something to the way the <code>this</code> keyword works within a
+    function. Lets explore this a bit deeper. Before we continue with the constructor functions I want to take a quick
+    look at the prototype of a Function; as members we find:
+</p>
+
+<ul>
+    <li>length</li>
+    <li>arguments</li>
+    <li>call</li>
+    <li>apply</li>
+    <li>bind</li>
+</ul>
+
+<p>
+    If you look at the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype">specs</a>
+    you will see a lot more members, but most of them are not the standard yet and are not implemented by all browsers
+    so we'll ignore them for now.
+</p>
+
+<h2>Length</h2>
+<p>The number of arguments in the signature of the function.</p>
+<pre>
+    function add(x,y) { }
+    console.log(add.length);
+</pre>
+
+<h2>Arguments</h2>
+<p>
+    The <code>arguments</code> are an array like structure, but not an array. The reasoning behind this is unclear, no
+    one actually present at those first standard meetings has said why this is; but we can surmise that fear of breaking
+    the web is keeping it this way. In ES6 this will be partly rectified.
+</p>
+
+<p>
+    If we want to convert the arguments to a real Array we can use a neat little trick. The following code shows a
+    few comparisons before and after the conversion of the arguments.
+</p>
+
+<pre class="ignore">
+    function add(x,y) {
+        var args = Array.prototype.slice.call(arguments, 0);
+
+        console.log(typeof arguments)
+        console.log(typeof args);
+
+        console.log( args instanceof Array );
+        console.log( args.constructor === Array );
+        console.log( Array.isArray( args ) );
+
+        console.log( Array.isArray(arguments) );
+    }
+
+    add (1,2);
+</pre>
+
+<p>
+    We already know the <code>slice</code> method on the prototype of an Array. But we do not know the <code>call</code>
+    method invoked in the conversion of the arguments. Luckily <code>call</code> is the next item on our list of
+    function members.
+</p>
+
+<h2>Call</h2>
+<p>
+    The main difference in JavaScript between objects and functions is that functions can be invoked. This is called
+    a function invocation. There are three ways to invoke a function in JavaScript. All three of them differ but their
+    main difference is about the value the <code>this</code> parameter has. Look at the next piece of code:
+</p>
+
+<pre>
+    function Person() {}
+
+    function add(x,y) {
+        if (this === window) console.log('window');
+        if (this === null) console.log('null');
+        if (typeof this === 'undefined') console.log('undefined');
+        if (this instanceof Person) console.log('Person');
+        return x + y;
+    }
+
+    add( 1,2 );
+    add.call( null, 1, 2 );
+    add.call( undefined, 1, 2 );
+    add.call( new Person(), 1, 2 );
+</pre>
+
+<p>
+    We can see that invoking a function normally will set its <code>this</code> parameter to the window object. With the
+    <code>call</code> member of a function we can specifically pass in a value for <code>this</code>. When you call this
+    member with either null or undefined as the first parameter the <code>this</code> member will again be set to the
+    <code>window</code> object. This will be changed in ES6 and <code>this</code> will be initialised to null.
+</p>
+
+<p class="remark">
+    Objects behave differently. When invoking a method on an object the value of <code>this</code> will be set to
+    the object itself.
+</p>
+
+<pre>
+    function Person() {
+        this.say = function() {
+            console.log( this instanceof Person ? 'Person' : 'something else' );
+        };
+    }
+
+    (new Person()).say();
+</pre>
+
+<h2>Apply</h2>
+<p>
+    Apply works the same as call, but instead of passing in parameters we can pass in an array of parameters.
+</p>
+
+<pre>
+    function Person() {}
+
+    function add(x, y) {
+        console.log( this instanceof Person ? 'Person' : 'something else...' );
+        return x + y;
+    }
+
+    console.log(
+      add.apply(new Person(), [1, 2]));
+</pre>
+
+<p>
+    The last member we need to talk about is the <code>bind</code> member...
+</p>
+
+<h2>Bind</h2>
+<p>
+    Bind, binds a context (this) to a function and returns a new function. This might sound strange but look at this
+    example:
+</p>
+<pre>
+    function Person(name) {
+      this.name = name;
+    }
+
+    function whoAreYou() {
+      console.log( this.name );
+    }
+
+    var person = new Person('Carlos');
+
+    var whoIsThisPerson = whoAreYou.bind(person);
+
+    whoIsThisPerson();
+</pre>
+<p>
+    Because I've bound this context of the <code>whoIsThisPerson</code> to a person we can now invoke this method
+    without parameters and just use the context (this) to get to our data. The next example will show binding to
+    a filter function:
+</p>
+
+<pre>
+    function equalsFilter(key, value) {
+        return this.filter(function(item) {
+            return item[key] === value;
+        });
+    }
+    function containsFilter(key, value) {
+        return this.filter(function(item) {
+            return item[key].indexOf( value ) > -1;
+        });
+    }
+
+    var collection = [
+        {name: 'Carlos', age: 35},
+        {name: 'Alicia', age: 32},
+        {name: 'Peter', age: 35},
+        {name: 'Vincent', age: 32},
+        {name: 'Bianca', age: 18},
+        {name: 'Eva', age: 31},
+        {name: 'Bernard', age: 42}
+    ];
+
+    var filterCollectionOnAge = equalsFilter.bind(collection, 'age');
+    var filterCollectionOnName = containsFilter.bind(collection, 'name');
+
+    console.log(filterCollectionOnAge(32));
+    console.log(filterCollectionOnName('e'));
+</pre>
+
+<p>
+    As you can see, the bind function also works like a curry function but sets a context. Another great example of
+    a bind function envolves setting up a call to a server where you want to specify everything but the filter
+    parameter and only when you know the value do you send it to the server.
+</p>
+
+<p>
+    This concludes a look at functions. The next example needs to be removed and switched to some other place.
+</p>
+
+<h2>Simple application example</h2>
+<p>
+    So imagine the following use case. We have a request to search a house for yellow objects. For each room we need to
+    register all of the items and their color and afterwards we need to count the number of yellow objects and return the sum of
+    all the yellow objects. The following code shows this off.
+</p>
+<pre>
+    function House() {
+
+        this.rooms = [];
+
+        this.addRoom = function(room) {
+            if (!(room instanceof Room)) throw 'Invalid room';
+            this.rooms.push(room);
+        }
+
+        this.numberOfYellowItems = function() {
+            var numberOfItemsPerRoom = this.rooms.map(function(room) {
+                return room.getYellowItems().length;
+            });
+
+            return numberOfItemsPerRoom.reduce(function(total, value) {
+              return total + value;
+            }, 0);
+        }
+    }
+
+    function Room() {
+
+        this.items = [];
+
+        this.addItem = function(item) {
+            if (!(item instanceof Item)) throw 'Invalid item';
+            this.items.push(item);
+        }
+        this.getYellowItems = function() {
+            return this.items.filter(function(item) {
+                return item.color === colors.yellow;
+            });
+        }
+    }
+
+    function Item(color) {
+        this.color = color;
+    }
+
+    var colors = {
+        yellow: 'yellow',
+        blue: 'blue',
+        green: 'green'
+    };
+
+
+    var house = new House();
+
+    var livingRoom = new Room();
+    var bathroom = new Room();
+
+    var couch = new Item(colors.yellow);
+    var tv = new Item(colors.blue);
+    var sock = new Item(colors.yellow);
+    var towel = new Item(colors.green);
+
+    livingRoom.addItem(couch);
+    livingRoom.addItem(tv);
+    bathroom.addItem(sock);
+    bathroom.addItem(towel);
+
+    house.addRoom(livingRoom);
+    house.addRoom(bathroom);
+
+
+    console.log( house.numberOfYellowItems() );
+</pre>
