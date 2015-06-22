@@ -1,4 +1,4 @@
-# Outdate demo
+# Outdated demo
 See working (outdated) demo on:
 http://angualrjs.azurewebsites.net/
 
