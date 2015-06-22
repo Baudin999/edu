@@ -1,7 +1,8 @@
-See working demo on:
+# Outdate demo
+See working (outdated) demo on:
 http://angualrjs.azurewebsites.net/
 
-
+# Running the local project
 run the server:
 ```node server.js```
 
