@@ -1,6 +1,6 @@
 # Outdated demo
 See working (outdated) demo on:
-http://angualrjs.azurewebsites.net/
+[http://material.diophantic.nl](material.diophantic.nl)
 
 # Running the local project
 run the server:
